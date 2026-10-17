@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Proyectos y financiación</title>
+<style>
+:root{--ink:#153746;--muted:#687b84;--line:#dce5e9;--panel:#f7fafb;--blue:#0B3F5C;--green:#19B94B;--gold:#EAB51D;--grey:#9FA09A;--bg:#fff;--shadow:0 12px 34px rgba(11,63,92,.14)}
+*{box-sizing:border-box} body{margin:0;background:#fff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+button,select{font:inherit}.page{max-width:1500px;margin:0 auto;padding:18px 22px 28px}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:12px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}.title{font-size:28px;line-height:1.08;margin:3px 0 5px}.subtitle{margin:0;color:var(--muted);font-size:14px}.version{font-size:12px;color:var(--muted);white-space:nowrap;margin-top:4px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.metric{border:1px solid var(--line);border-radius:14px;padding:13px 15px;background:#fff}.metric .label{font-size:12px;color:var(--muted);margin-bottom:5px}.metric .value{font-size:24px;font-weight:750;letter-spacing:-.02em}.metric .note{font-size:11px;color:var(--muted);margin-top:3px}
+.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin-bottom:12px;flex-wrap:wrap}.tabs,.filters{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 11px;cursor:pointer;font-size:13px}.chip.active{background:var(--blue);border-color:var(--blue);color:#fff}.select{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 30px 7px 11px;color:var(--ink)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:0;transition:grid-template-columns .25s ease}.layout.open{grid-template-columns:minmax(0,1fr) 390px;gap:16px}.main{min-width:0}.drawer{display:none;border-left:1px solid var(--line);padding-left:16px;min-width:0}.layout.open .drawer{display:block}.drawer-card{position:sticky;top:12px;border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow);padding:17px}.close{float:right;border:0;background:#eef4f6;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:20px;color:var(--ink)}.d-code{font-size:12px;font-weight:800;color:var(--blue);letter-spacing:.05em;margin-bottom:7px}.d-title{font-size:18px;line-height:1.28;margin:0 38px 14px 0}.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:13px 0}.d-item{background:var(--panel);border-radius:10px;padding:9px}.d-item b{display:block;font-size:11px;color:var(--muted);margin-bottom:3px}.d-item span{font-size:13px;font-weight:650}.d-block{border-top:1px solid var(--line);padding-top:11px;margin-top:11px}.d-block b{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.d-block p{font-size:13px;line-height:1.5;margin:5px 0 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:6px 0 10px}.section-head h2{font-size:17px;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:0}.timeline-wrap{border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;overflow:hidden}.years{display:grid;grid-template-columns:230px repeat(21,1fr);gap:0;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:7px}.years .blank{font-size:11px;color:var(--muted)}.year{font-size:10px;color:var(--muted);text-align:center}.rows{display:flex;flex-direction:column;gap:4px}.row{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:34px;align-items:center}.row-label{padding-right:10px;overflow:hidden}.row-label .code{font-size:11px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row-label .org{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{position:relative;height:28px;background-image:linear-gradient(to right,var(--line) 1px,transparent 1px);background-size:calc(100% / 21) 100%;border-radius:6px}.bar{position:absolute;top:4px;height:20px;border:0;border-radius:7px;cursor:pointer;min-width:7px;transition:filter .15s,transform .15s;display:flex;align-items:center;padding:0 7px;color:#fff;font-size:10px;font-weight:750;white-space:nowrap;overflow:hidden}.bar:hover{filter:brightness(1.08);transform:translateY(-1px)}.bar.ip{background:var(--blue)}.bar.team{background:var(--gold);color:#153746}.bar.running::after{content:"";position:absolute;right:4px;width:5px;height:5px;border-radius:50%;background:var(--green)}
+.section-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.legend{display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:0}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px}.dot.ip{background:var(--blue)}.dot.team{background:var(--gold)}.dot.live{background:var(--green)}
+.funding{display:none}.funding.active{display:block}.timeline-view.hidden{display:none}.fund-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.card{border:1px solid var(--line);border-radius:16px;padding:15px}.card h3{font-size:15px;margin:0 0 12px}.scope-row{display:grid;grid-template-columns:105px minmax(0,1fr) 95px;align-items:center;gap:10px;margin:10px 0}.scope-label{font-size:12px}.scope-track{height:11px;background:#edf2f4;border-radius:999px;overflow:hidden}.scope-fill{height:100%;background:var(--blue);border-radius:999px}.scope-value{text-align:right;font-size:12px;font-weight:700}.org-list{display:flex;flex-direction:column;gap:8px}.org-item{border:1px solid var(--line);border-radius:11px;padding:10px;cursor:pointer}.org-item:hover{background:var(--panel)}.org-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:700}.org-meta{font-size:11px;color:var(--muted);margin-top:4px}.empty{padding:28px;text-align:center;color:var(--muted)}
+@media(max-width:980px){.metrics{grid-template-columns:repeat(2,1fr)}.layout.open{grid-template-columns:1fr}.layout.open .drawer{display:block;border-left:0;padding-left:0;margin-top:14px}.drawer-card{position:static}.fund-grid{grid-template-columns:1fr}.years{grid-template-columns:180px repeat(21,1fr)}.row{grid-template-columns:180px minmax(0,1fr)}}
+@media(max-width:640px){.page{padding:14px 12px}.metrics{grid-template-columns:1fr 1fr}.metric .value{font-size:20px}.years{display:none}.timeline-wrap{padding:10px}.row{grid-template-columns:118px minmax(0,1fr)}.row-label .org{display:none}.track{background-size:20% 100%}.layout.open .drawer{margin-top:10px}}
+</style>
+
+<style id="genially-embed-style">
+:root{--bg:#fff!important;--blue:#0B3F5C;--green:#19B94B;--gold:#EAB51D;--yellow:#EAB51D;--grey:#9FA09A}
+html,body{background:#fff!important;min-height:100%;overflow-x:hidden}
+.page{max-width:none!important;margin:0!important;padding:12px 14px 16px!important}
+.panel,.metric,.card,.timeline-wrap,.drawer-card{background:#fff!important;box-shadow:0 8px 24px rgba(11,63,92,.07)!important}
+.home,.version{display:none!important}
+@media(max-width:700px){.page{padding:8px!important}}
+</style>
+
+<style id="projects-extra-top-space">
+.page{
+  padding-top:30px!important;
+}
+@media(max-width:700px){
+  .page{
+    padding-top:22px!important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  
+
+  <section class="metrics" aria-label="Indicadores principales">
+    <article class="metric"><div class="label">Financiación total</div><div class="value" id="mFunding">—</div><div class="note" id="mFundingNote">—</div></article>
+    <article class="metric"><div class="label">Actuaciones financiadas</div><div class="value" id="mProjects">—</div><div class="note" id="mProjectsNote">—</div></article>
+    <article class="metric"><div class="label">Financiación por rol</div><div class="value" id="mIP">—</div><div class="note" id="mIPNote">—</div></article>
+    <article class="metric"><div class="label">Proyectos competitivos</div><div class="value" id="mCompetitive">—</div><div class="note" id="mCompetitiveNote">—</div></article>
+  </section>
+
+  <div class="toolbar">
+    <div class="tabs">
+      <button class="chip active" data-view="timeline">Cronograma</button>
+      <button class="chip" data-view="funding">Financiación</button>
+    </div>
+    <div class="filters">
+      <button class="chip active" data-role="all">Todos</button>
+      <button class="chip" data-role="IP">Como IP</button>
+      <button class="chip" data-role="Equipo investigador">Equipo</button>
+      <select class="select" id="scopeFilter" aria-label="Filtrar por ámbito"><option value="all">Todas las categorías</option><option value="competitive" selected>Proyectos competitivos</option><option>Nacional</option><option>Autonómico</option><option>Local</option><option>Ayuda complementaria</option><option>Ayuda de movilidad</option></select>
+      <select class="select" id="statusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="running">En ejecución</option><option value="finished">Finalizados</option></select>
+    </div>
+  </div>
+
+  <div class="layout" id="layout">
+    <main class="main">
+      <section class="timeline-view" id="timelineView">
+        <div class="section-head"><div><h2>Continuidad temporal de proyectos y ayudas</h2><p>Selecciona una barra para consultar la ficha completa.</p></div><div class="section-meta"><p id="countLabel">17 actuaciones visibles</p><div class="legend"><span><i class="dot ip"></i>IP / responsable</span><span><i class="dot team"></i>Equipo investigador</span><span><i class="dot live"></i>En ejecución en 2026</span></div></div></div>
+        <div class="timeline-wrap">
+          <div class="years" id="years"></div>
+          <div class="rows" id="rows"></div>
+        </div>
+      </section>
+
+      <section class="funding" id="fundingView">
+        <div class="section-head"><div><h2>Distribución de la financiación</h2><p>Vista agregada por ámbito y organismo financiador.</p></div><p>Importes de todas las actuaciones visibles</p></div>
+        <div class="fund-grid">
+          <article class="card"><h3>Financiación por categoría</h3><div id="scopeBars"></div></article>
+          <article class="card"><h3>Principales entidades financiadoras</h3><div class="org-list" id="orgList"></div></article>
+        </div>
+      </section>
+    </main>
+
+    <aside class="drawer" id="drawer" aria-live="polite"><div class="drawer-card"><button class="close" id="closeDrawer" aria-label="Cerrar">×</button><div id="drawerContent"></div></div></aside>
+  </div>
+</div>
+<script>
+const projects = [
+  {
+    "code": "PID2022-141808OB-I00",
+    "title": "Variables de protección y riesgo a factores específicos y transdiagnósticos de la psicopatología durante la adolescencia y adultez emergente",
+    "start": 2023,
+    "end": 2026,
+    "role": "IP",
+    "scope": "Nacional",
+    "org": "Ministerio de Ciencia e Innovación",
+    "amount": 124375.0,
+    "people": 6,
+    "pubs": 2,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón, Manuel I. Ibáñez Ribes",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 23I269.01/1"
+  },
+  {
+    "code": "2023I036",
+    "title": "Relación entre el consumo de cannabis, sintomatología depresiva y conducta suicida: un estudio longitudinal en adolescentes y adultos jóvenes",
+    "start": 2024,
+    "end": 2025,
+    "role": "IP",
+    "scope": "Nacional",
+    "org": "Plan Nacional sobre Drogas (Ministerio de Sanidad)",
+    "amount": 38588.0,
+    "people": 4,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón",
+    "team": "Manuel I. Ibáñez Ribes, Generós Ortet, Susana Montañes",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 24I034.01/1"
+  },
+  {
+    "code": "GV/2016/158",
+    "title": "Estudio prospectivo sobre la influencia de variables psicosociales en el desarrollo de conductas adictivas en la adolescencia",
+    "start": 2016,
+    "end": 2017,
+    "role": "IP",
+    "scope": "Autonómico",
+    "org": "Generalitat Valenciana",
+    "amount": 16000.0,
+    "people": 4,
+    "pubs": 17,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 16I203.01/1; 16I203.01/2"
+  },
+  {
+    "code": "CIAICO/2021/052",
+    "title": "Personalidad y psicopatología: estructura, estabilidad temporal y etiología de los espectros de interiorización y exteriorización durante la adolescencia y adultez emergente",
+    "start": 2022,
+    "end": 2024,
+    "role": "IP",
+    "scope": "Autonómico",
+    "org": "Generalitat Valenciana",
+    "amount": 75150.0,
+    "people": 5,
+    "pubs": 3,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón y Manuel I. Ibáñez",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 22I323.01/1"
+  },
+  {
+    "code": "CIAICO/2024/47",
+    "title": "Personalidad y psicopatología interiorizada y exteriorizada: un estudio longitudinal-prospectivo en la adolescencia y la adultez emergente (PePsA)",
+    "start": 2025,
+    "end": 2028,
+    "role": "IP",
+    "scope": "Autonómico",
+    "org": "Generalitat Valenciana",
+    "amount": 90000.0,
+    "people": 5,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón y Manuel I. Ibáñez",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 25I459.01/1"
+  },
+  {
+    "code": "UJI-A2017-18",
+    "title": "Estudio transcultural y longitudinal sobre variables psicológicas de riesgo y protección en el uso y abuso de alcohol y marihuana en jóvenes",
+    "start": 2018,
+    "end": 2019,
+    "role": "IP",
+    "scope": "Local",
+    "org": "Universitat Jaume I",
+    "amount": 18225.0,
+    "people": 1,
+    "pubs": 5,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 17I373.01/1"
+  },
+  {
+    "code": "UJI-A2019-08",
+    "title": "Estudio transcultural y longitudinal de variables psicosociales de riesgo y protección a las adicciones tóxicas y comportamentales en jóvenes",
+    "start": 2020,
+    "end": 2022,
+    "role": "IP",
+    "scope": "Local",
+    "org": "Universitat Jaume I",
+    "amount": 22163.4,
+    "people": 1,
+    "pubs": 13,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 19I543.01/1"
+  },
+  {
+    "code": "UJI-B2022-29",
+    "title": "Vías etiológicas de personalidad en el uso problemático de sustancias y adicciones comportamentales: un estudio transnacional y longitudinal en adultos jóvenes",
+    "start": 2023,
+    "end": 2025,
+    "role": "IP",
+    "scope": "Local",
+    "org": "Universitat Jaume I",
+    "amount": 17385.88,
+    "people": 3,
+    "pubs": 3,
+    "type": "Proyecto competitivo",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 22I581.01/1"
+  },
+  {
+    "code": "GACUJIMB/2023/21",
+    "title": "Ayuda complementaria GAC 1/1/24-31/12/24",
+    "start": 2024,
+    "end": 2024,
+    "role": "IP",
+    "scope": "Ayuda complementaria",
+    "org": "Universitat Jaume I",
+    "amount": 3675.34,
+    "people": null,
+    "pubs": 0,
+    "type": "Ayuda complementaria GAC",
+    "ip": "Laura Mezquita Guillamón, Manuel I. Ibáñez Ribes",
+    "team": "Generós Ortet, Micaela Moro, Susana Montañes, Elena Villa, Claudia Ferrer, Álvaro Ortega Entidad/es financiadora/s: Universitat Jaume I",
+    "source": "CV Word, párrafo 549",
+    "notes": null
+  },
+  {
+    "code": "GACUJIMA/2024/21",
+    "title": "Ayuda complementaria GAC 1/1/25-31/12/25",
+    "start": 2025,
+    "end": 2025,
+    "role": "IP",
+    "scope": "Ayuda complementaria",
+    "org": "Universitat Jaume I",
+    "amount": 5000.0,
+    "people": null,
+    "pubs": 0,
+    "type": "Ayuda complementaria GAC",
+    "ip": "Laura Mezquita Guillamón, Manuel I. Ibáñez Ribes",
+    "team": "Generós Ortet, Micaela Moro, Susana Montañes, Elena Villa, Claudia Ferrer, Álvaro Ortega, Marta Marcilla Entidad/es financiadora/s: Universitat Jaume I",
+    "source": "CV Word, párrafo 550",
+    "notes": null
+  },
+  {
+    "code": "GACUJIMB/2024/04",
+    "title": "Ayuda complementaria GAC 1/1/25-31/12/26",
+    "start": 2025,
+    "end": 2026,
+    "role": "IP",
+    "scope": "Ayuda complementaria",
+    "org": "Universitat Jaume I",
+    "amount": 20857.44,
+    "people": null,
+    "pubs": 0,
+    "type": "Ayuda complementaria GAC",
+    "ip": "Laura Mezquita Guillamón,",
+    "team": "Manuel I. Ibáñez, Generós Ortet, Susana Montañes",
+    "source": "CV Word, párrafo 551",
+    "notes": null
+  },
+  {
+    "code": "GACUJIMA/2025/35",
+    "title": "Ayuda complementaria GAC 1/1/26-31/12/27",
+    "start": 2026,
+    "end": 2027,
+    "role": "IP",
+    "scope": "Ayuda complementaria",
+    "org": "Universitat Jaume I",
+    "amount": 10965.91,
+    "people": null,
+    "pubs": 0,
+    "type": "Ayuda complementaria GAC",
+    "ip": "Laura Mezquita Guillamón, Manuel I. Ibáñez Ribes",
+    "team": "Generós Ortet, Elena Villa",
+    "source": "CV Word, párrafo 552",
+    "notes": null
+  },
+  {
+    "code": "PNSD2008",
+    "title": "Factores biológicos de riesgo, consumo de drogas y enfermedad mental",
+    "start": 2008,
+    "end": 2011,
+    "role": "Equipo investigador",
+    "scope": "Nacional",
+    "org": "Plan Nacional sobre Drogas (Ministerio de Sanidad y Consumo)",
+    "amount": 51270.0,
+    "people": null,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Lourdes Fañanás Saura",
+    "team": "Laura Mezquita Guillamón",
+    "source": "CV Word, párrafo 556",
+    "notes": null
+  },
+  {
+    "code": "PSI2008-05988/PSIC",
+    "title": "Estudio prospectivo de variables genéticas, psicológicas y sociales en el uso y abuso de alcohol",
+    "start": 2011,
+    "end": 2011,
+    "role": "Equipo investigador",
+    "scope": "Nacional",
+    "org": "Ministerio de Educación, Cultura y Deporte",
+    "amount": 66550.0,
+    "people": 8,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Generós Ortet Fabregat",
+    "team": "Laura Mezquita Guillamón",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 08I375.01/1"
+  },
+  {
+    "code": "PSI2015-67766-R",
+    "title": "Estudio prospectivo de variables psicosociales implicadas en las conductas adictivas durante la adolescencia",
+    "start": 2016,
+    "end": 2018,
+    "role": "Equipo investigador",
+    "scope": "Nacional",
+    "org": "Ministerio de Economía y Competitividad",
+    "amount": 20570.0,
+    "people": 4,
+    "pubs": 8,
+    "type": "Proyecto competitivo",
+    "ip": "Generós Ortet Fabregat; Manuel Ignacio Ibáñez Ribes",
+    "team": "Laura Mezquita Guillamón",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 16I143.01/1"
+  },
+  {
+    "code": "RTI2018-099800-B-I00",
+    "title": "Personalidad, estrés y salud mental en la adolescencia: un estudio longitudinal en muestras de población normal y clínica (PESMA)",
+    "start": 2019,
+    "end": 2022,
+    "role": "Equipo investigador",
+    "scope": "Nacional",
+    "org": "Ministerio de Ciencia, Innovación y Universidades",
+    "amount": 79860.0,
+    "people": 6,
+    "pubs": 14,
+    "type": "Proyecto competitivo",
+    "ip": "Generós Ortet Fabregat; Manuel Ignacio Ibáñez Ribes",
+    "team": "Laura Mezquita Guillamón",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 19I336.01/1"
+  },
+  {
+    "code": "SM I 1/2014",
+    "title": "Eficacia de un programa de rehabilitación neurocognitiva en grupo en la mejoría de la autonomía y el funcionamiento psicosocial",
+    "start": 2014,
+    "end": 2014,
+    "role": "Equipo investigador",
+    "scope": "Autonómico",
+    "org": "Generalitat Valenciana",
+    "amount": 8950.0,
+    "people": 4,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Micaela Moro",
+    "team": "Laura Mezquita Guillamón",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 14I167.01/1"
+  },
+  {
+    "code": "P1·1B2008-45",
+    "title": "El papel de la desregulación emocional, los acontecimientos traumáticos en la infancia y las variaciones de los genes de la serotonina 5HT2A y del triptófano hidroxilasa-2 (TPH2) como factores biopsicosociales de vulnerabilidad",
+    "start": 2008,
+    "end": 2011,
+    "role": "Equipo investigador",
+    "scope": "Local",
+    "org": "Universitat Jaume I",
+    "amount": 17900.0,
+    "people": 8,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Mª Ángeles Ruipérez Rodríguez",
+    "team": "Laura Mezquita Guillamón",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 08I440.01/1"
+  },
+  {
+    "code": "P1·1B2011-47",
+    "title": "El síndrome de externalización-desinhibición: polimorfismos genéticos, factores de personalidad y otros factores psicosociales en un estudio prospectivo de cinco años",
+    "start": 2012,
+    "end": 2014,
+    "role": "Equipo investigador",
+    "scope": "Local",
+    "org": "Universitat Jaume I",
+    "amount": 29890.12,
+    "people": 3,
+    "pubs": 4,
+    "type": "Proyecto competitivo",
+    "ip": "Generós Ortet Fabregat",
+    "team": "Laura Mezquita Guillamón",
+    "source": "Certificado UJI 17/03/2026",
+    "notes": "Código interno UJI: 11I323.01/1"
+  },
+  {
+    "code": "Davalos2014",
+    "title": "Estudio longitudinal-prospectivo de factores genéticos, psicológicos y sociales implicados en el desarrollo del consumo de alcohol y otras drogas en jóvenes castellonenses",
+    "start": 2014,
+    "end": 2015,
+    "role": "Equipo investigador",
+    "scope": "Local",
+    "org": "Fundación Dávalos Flecher",
+    "amount": 8000.0,
+    "people": null,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Manuel Ignacio Ibáñez Ribes",
+    "team": "Laura Mezquita Guillamón",
+    "source": "CV Word, párrafo 566",
+    "notes": null
+  },
+  {
+    "code": "VAL-2016-02",
+    "title": "Estudio de viabilidad de la batería de evaluación de la capacidad y el desempeño, una herramienta de evaluación de la discapacidad en línea (BECAD)",
+    "start": 2017,
+    "end": 2018,
+    "role": "Equipo investigador",
+    "scope": "Local",
+    "org": "Universitat Jaume I",
+    "amount": 40000.0,
+    "people": null,
+    "pubs": 0,
+    "type": "Proyecto competitivo",
+    "ip": "Micaela Moro",
+    "team": "Laura Mezquita Guillamón",
+    "source": "CV Word, párrafo 567",
+    "notes": null
+  },
+  {
+    "code": "E-2009-05",
+    "title": "Estudio transcultural de motivos por los que las personas consumen alcohol",
+    "start": 2009,
+    "end": 2009,
+    "role": "IP",
+    "scope": "Ayuda de movilidad",
+    "org": "Universitat Jaume I",
+    "amount": 4935.0,
+    "people": null,
+    "pubs": 2,
+    "type": "Ayuda de movilidad / estancia",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado Proyectos estancias (OCIT-UJI, 2014)",
+    "notes": "Estancia temporal en otro centro de investigación"
+  },
+  {
+    "code": "E-2010-12",
+    "title": "Estudio de variables psicológicas relacionadas con el consumo de alcohol en jóvenes universitarios",
+    "start": 2010,
+    "end": 2010,
+    "role": "IP",
+    "scope": "Ayuda de movilidad",
+    "org": "Universitat Jaume I",
+    "amount": 3600.0,
+    "people": null,
+    "pubs": 2,
+    "type": "Ayuda de movilidad / estancia",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado Proyectos estancias (OCIT-UJI, 2014)",
+    "notes": "Estancia temporal en otro centro de investigación"
+  },
+  {
+    "code": "E-2013-06",
+    "title": "Estructura de la psicopatología y su relación con la personalidad: estudios transversales, prospectivos y de gemelos",
+    "start": 2013,
+    "end": 2013,
+    "role": "IP",
+    "scope": "Ayuda de movilidad",
+    "org": "Universitat Jaume I",
+    "amount": 6000.0,
+    "people": null,
+    "pubs": 1,
+    "type": "Ayuda de movilidad / estancia",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado Proyectos estancias (OCIT-UJI, 2014)",
+    "notes": "Estancia temporal en otro centro de investigación"
+  },
+  {
+    "code": "E-2014-36",
+    "title": "Estudio sobre la heredabilidad de la personalidad, los motivos y el consumo de alcohol",
+    "start": 2014,
+    "end": 2014,
+    "role": "IP",
+    "scope": "Ayuda de movilidad",
+    "org": "Universitat Jaume I",
+    "amount": 2300.0,
+    "people": null,
+    "pubs": 1,
+    "type": "Ayuda de movilidad / estancia",
+    "ip": "Laura Mezquita Guillamón",
+    "team": null,
+    "source": "Certificado Proyectos estancias (OCIT-UJI, 2014)",
+    "notes": "Estancia temporal en otro centro de investigación"
+  }
+];
+const minYear=2008,maxYear=2028,currentYear=2026; let role='all';
+const euro=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+function visible(){const scope=document.getElementById('scopeFilter').value,status=document.getElementById('statusFilter').value;return projects.filter(p=>(role==='all'||p.role===role)&&(scope==='all'||(scope==='competitive'?p.type==='Proyecto competitivo':p.scope===scope))&&(status==='all'||(status==='running'?p.end>=currentYear:p.end<currentYear)))}
+function renderYears(){const y=document.getElementById('years');y.innerHTML='<div class="blank">Proyecto / entidad</div>'+Array.from({length:maxYear-minYear+1},(_,i)=>`<div class="year">${String(minYear+i).slice(2)}</div>`).join('')}
+function renderTimeline(){const data=visible().sort((a,b)=>b.start-a.start||b.end-a.end),rows=document.getElementById('rows');document.getElementById('countLabel').textContent=`${data.length} actuaciones visibles`;rows.innerHTML=data.length?'':'<div class="empty">No hay actuaciones con estos filtros.</div>';data.forEach(p=>{const left=((p.start-minYear)/(maxYear-minYear+1))*100,width=((p.end-p.start+1)/(maxYear-minYear+1))*100;const row=document.createElement('div');row.className='row';row.innerHTML=`<div class="row-label"><div class="code">${p.code}</div><div class="org">${p.org}</div></div><div class="track"><button class="bar ${p.role==='IP'?'ip':'team'} ${p.end>=currentYear?'running':''}" style="left:${left}%;width:${width}%" title="${p.title}">${euro(p.amount)}</button></div>`;row.querySelector('button').addEventListener('click',()=>openDrawer(p));rows.appendChild(row)})}
+function openDrawer(p){document.getElementById('layout').classList.add('open');document.getElementById('drawerContent').innerHTML=`<h2 class="d-title">${p.title}</h2><div class="d-grid"><div class="d-item"><b>Cuantía</b><span>${euro(p.amount)}</span></div><div class="d-item"><b>Periodo</b><span>${p.start}–${p.end}</span></div><div class="d-item"><b>Rol</b><span>${p.role}</span></div><div class="d-item"><b>Ámbito</b><span>${p.scope}</span></div></div><div class="d-block"><b>Convocatoria / tipo de actuación</b><p>${p.type}</p></div><div class="d-block"><b>Entidad financiadora</b><p>${p.org}</p></div>${p.ip?`<div class="d-block"><b>IP / responsables</b><p>${p.ip}</p></div>`:''}${p.team?`<div class="d-block"><b>Equipo investigador</b><p>${p.team}</p></div>`:''}<div class="d-block"><b>Estado</b><p>${p.end>=currentYear?'En ejecución':'Finalizado'}</p></div>`}
+function renderFunding(){const data=visible(),scopeTotals={};data.forEach(p=>scopeTotals[p.scope]=(scopeTotals[p.scope]||0)+p.amount);const max=Math.max(...Object.values(scopeTotals),1);document.getElementById('scopeBars').innerHTML=Object.entries(scopeTotals).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="scope-row"><div class="scope-label">${k}</div><div class="scope-track"><div class="scope-fill" style="width:${v/max*100}%"></div></div><div class="scope-value">${euro(v)}</div></div>`).join('')||'<div class="empty">Sin datos</div>';const org={};data.forEach(p=>{if(!org[p.org])org[p.org]={amount:0,n:0};org[p.org].amount+=p.amount;org[p.org].n++});document.getElementById('orgList').innerHTML=Object.entries(org).sort((a,b)=>b[1].amount-a[1].amount).slice(0,6).map(([k,v])=>`<div class="org-item"><div class="org-top"><span>${k}</span><span>${euro(v.amount)}</span></div><div class="org-meta">${v.n} actuación${v.n>1?'es':''}</div></div>`).join('')}
+function renderMetrics(){const data=visible(),total=data.reduce((s,p)=>s+p.amount,0),ip=data.filter(p=>p.role==='IP'),team=data.filter(p=>p.role!=='IP'),ipAmt=ip.reduce((s,p)=>s+p.amount,0),teamAmt=team.reduce((s,p)=>s+p.amount,0),competitive=data.filter(p=>p.type==='Proyecto competitivo');document.getElementById('mFunding').textContent=euro(total);document.getElementById('mFundingNote').textContent=`${euro(ipAmt)} como IP · ${euro(teamAmt)} como equipo`;document.getElementById('mProjects').textContent=data.length;document.getElementById('mProjectsNote').textContent=`${ip.length} como IP · ${team.length} como equipo`;document.getElementById('mIP').textContent=euro(ipAmt);document.getElementById('mIPNote').textContent=total?`${(ipAmt/total*100).toFixed(1).replace('.',',')} % del total visible como IP`:'Sin financiación visible';document.getElementById('mCompetitive').textContent=competitive.length;document.getElementById('mCompetitiveNote').textContent=`${euro(competitive.reduce((s,p)=>s+p.amount,0))} captados`;}
+function rerender(){renderMetrics();renderTimeline();renderFunding();document.getElementById('layout').classList.remove('open')}
+document.querySelectorAll('[data-role]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-role]').forEach(x=>x.classList.remove('active'));b.classList.add('active');role=b.dataset.role;rerender()}));
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-view]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const t=b.dataset.view==='timeline';document.getElementById('timelineView').classList.toggle('hidden',!t);document.getElementById('fundingView').classList.toggle('active',!t);document.getElementById('layout').classList.remove('open')}));
+document.getElementById('scopeFilter').addEventListener('change',rerender);document.getElementById('statusFilter').addEventListener('change',rerender);document.getElementById('closeDrawer').addEventListener('click',()=>document.getElementById('layout').classList.remove('open'));
+renderYears();rerender();
+</script>
+
+<script id="click-outside-close-projects">
+document.addEventListener('click', function(ev){
+  const layout=document.getElementById('layout');
+  const drawer=document.getElementById('drawer');
+  if(!layout || !drawer || !layout.classList.contains('open')) return;
+  if(drawer.contains(ev.target)) return;
+  if(ev.target.closest('.bar')) return; // project opener
+  layout.classList.remove('open');
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Revistas científicas por temática</title>
+<style>
+:root{--bg:#fff;--panel:#fff;--ink:#12394f;--muted:#666b70;--line:#d8d9d4;
+--assessment:#0B3F5C;--personality:#19B94B;--addictions:#EAB51D;--general:#9FA09A}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Montserrat,'Avenir Next','Segoe UI',Arial,sans-serif}
+header{padding:11px 22px 6px}h1{font-size:21px;margin:0 0 3px}.header-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.sub{color:var(--muted);font-size:12px}.legend-inline{display:flex;align-items:center;gap:8px 13px;flex-wrap:wrap;font-size:11px;color:var(--muted)}.legend-inline .legend-item{display:flex;align-items:center;gap:5px}.legend-inline .dot{width:9px;height:9px}
+.toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:0 22px 7px}button,select,input{font:inherit}button{border:1px solid var(--line);background:#fff;color:var(--ink);padding:6px 10px;border-radius:9px;cursor:pointer;font-size:12px}button.active{background:var(--assessment);color:#fff;border-color:var(--assessment)}select,input{border:1px solid var(--line);background:#fff;padding:6px 8px;border-radius:9px;color:var(--ink);font-size:12px}
+.legend-item{display:flex;align-items:center;gap:6px}.dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+main{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:0 22px 16px;align-items:start}main.detail-open{grid-template-columns:minmax(0,1fr) minmax(300px,345px)}.panel{background:#fff;border:1px solid var(--line);border-radius:14px;min-height:640px;overflow:hidden}.chart{padding:12px;overflow:auto;max-height:calc(100vh - 118px)}
+.bar-row{display:grid;grid-template-columns:minmax(185px,360px) 1fr 34px;gap:10px;align-items:center;padding:7px 6px;border-radius:8px;cursor:pointer}.bar-row:hover,.bar-row.is-selected{background:#f0f4f5}.label{font-size:12.5px;line-height:1.25}.track{height:15px;background:#e9edef;border-radius:999px;overflow:hidden}.fill{height:100%;border-radius:999px}.value{font-weight:800;font-size:13px;text-align:right}
+.bubble-wrap{position:relative;min-height:410px;height:min(430px,calc(100vh - 205px));overflow:hidden;background:radial-gradient(circle at 50% 50%,#fff 0,#fff 60%,#fafaf8 100%)}.cluster-label{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:750;letter-spacing:.02em;opacity:.85;pointer-events:none;white-space:nowrap;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.84);border:1px solid var(--line);z-index:1}
+.bubble{position:absolute;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:7px;cursor:pointer;border:2px solid rgba(255,255,255,.9);box-shadow:0 2px 9px rgba(11,63,92,.15);transition:transform .22s ease,filter .22s ease,opacity .48s ease,background-color .62s ease;will-change:left,top,width,height,opacity;z-index:2}.bubble:hover{transform:scale(1.055);filter:saturate(1.08);z-index:5}.bubble.is-selected{transform:scale(1.12);opacity:1!important;z-index:6;box-shadow:0 5px 18px rgba(11,63,92,.30)}.bubble.is-dimmed{opacity:.48}.bubble span{font-size:10.5px;line-height:1.12;overflow:hidden;text-shadow:0 1px 2px rgba(0,0,0,.25)}.bubble b{font-size:13px}
+.side{display:none;padding:12px;position:sticky;top:8px;max-height:calc(100vh - 24px);overflow:auto;transition:opacity .22s ease}.detail-open .side{display:block}.detail-close{float:right;width:28px;height:28px;padding:0;border-radius:50%;font-size:17px;line-height:1}.side.updating{opacity:.35}.side h2{font-size:16px;margin:0 0 8px}.theme-badge{display:inline-flex;padding:4px 8px;border-radius:999px;color:#fff;font-size:11px;font-weight:750;margin:3px 0 8px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:9px 0}.metric{background:#f5f6f4;border-left:4px solid var(--assessment);padding:7px;border-radius:8px}.metric b{display:block;font-size:17px}.metric small{color:var(--muted)}.article{border-top:1px solid var(--line);padding:9px 0}.article a{color:var(--assessment);text-decoration:none;font-size:12px;font-weight:650}.article div{font-size:11px;color:var(--muted);margin-top:3px}.empty{padding:24px;color:var(--muted)}footer{font-size:11px;color:var(--muted);padding:0 22px 16px}
+@media(max-width:760px){.bubble-wrap{min-height:390px;height:410px}main,main.detail-open{grid-template-columns:1fr}.side{position:static;max-height:none}.panel{min-height:auto}.bar-row{grid-template-columns:minmax(130px,230px) 1fr 32px}}
+
+.time-inline{display:flex;align-items:center;gap:5px;min-width:360px;flex:1 1 420px;max-width:620px}
+.play-btn{width:32px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:13px;border-color:var(--assessment);color:var(--assessment);flex:0 0 auto}
+.play-btn.playing{background:var(--assessment);color:#fff}
+.year-inline{display:flex;align-items:baseline;gap:4px;white-space:nowrap;flex:0 0 auto;padding:0 2px}
+.year-inline span{font-size:9px;color:var(--muted)}
+.year-inline strong{font-size:16px;color:var(--assessment);min-width:36px}
+.range-inline{display:grid;grid-template-columns:25px minmax(120px,1fr) 25px;gap:4px;align-items:center;flex:1 1 auto;min-width:170px}
+.range-inline span{font-size:9px;color:var(--muted);text-align:center}
+.range-inline input{width:100%;padding:0;border:0;background:transparent;accent-color:var(--assessment)}
+.timeline-metrics{display:flex;gap:4px;align-items:center;flex-wrap:nowrap;margin-left:auto;white-space:nowrap}
+.timeline-metrics span{background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 6px;font-size:9px;color:var(--muted)}
+.timeline-metrics b{font-size:11px;color:var(--ink);margin-right:2px}
+@media(max-width:1050px){.timeline-metrics{width:100%;margin-left:0;flex-wrap:wrap}.time-inline{max-width:none}}
+@media(max-width:620px){header{padding-left:12px;padding-right:12px}.toolbar{padding-left:12px;padding-right:12px}.header-meta{align-items:flex-start}.legend-inline{gap:6px 10px}.time-inline{min-width:100%;flex-basis:100%}.range-inline{min-width:145px}}
+
+</style>
+
+<style id="genially-embed-style">
+:root{--bg:#fff!important;--blue:#0B3F5C;--green:#19B94B;--gold:#EAB51D;--yellow:#EAB51D;--grey:#9FA09A}
+html,body{background:#fff!important;min-height:100%;overflow-x:hidden}
+.page{max-width:none!important;margin:0!important;padding:12px 14px 16px!important}
+.panel,.metric,.card,.timeline-wrap,.drawer-card{background:#fff!important;box-shadow:0 8px 24px rgba(11,63,92,.07)!important}
+.home,.version{display:none!important}
+@media(max-width:700px){.page{padding:8px!important}}
+</style>
+<style id="publication-title-uniformity">
+.pubTitle,.pubTitle a,.paperTitle,.paperTitle a,.articleTitle,.articleTitle a{
+color:#0B3F5C!important;font-size:inherit!important;line-height:inherit!important;font-weight:800!important;text-decoration:none!important}
+</style>
+<style id="journal-detail-titles-final">
+/* Uniformidad absoluta en la lista de artículos del panel lateral */
+.detail .article > a,
+.detail .article > .article-title{
+  display:inline!important;
+  color:var(--assessment)!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+  font-weight:650!important;
+  text-decoration:none!important;
+}
+</style>
+
+<style id="article-title-exact-same-style">
+/* Mismo elemento visual haya o no DOI */
+.article > .article-title{
+  display:inline!important;
+  color:var(--assessment)!important;
+  font-family:inherit!important;
+  font-size:12px!important;
+  line-height:1.35!important;
+  font-weight:650!important;
+  letter-spacing:normal!important;
+  text-decoration:none!important;
+  text-decoration-line:none!important;
+}
+</style>
+</head>
+<body>
+<header><h1>Revistas científicas</h1><div class="header-meta"><div class="sub">Producción agrupada por temática · evolución acumulada de las publicaciones</div><div class="legend-inline" aria-label="Leyenda temática"><span class="legend-item"><i class="dot" style="background:#EAB51D"></i>Adicciones</span><span class="legend-item"><i class="dot" style="background:#19B94B"></i>Personalidad</span><span class="legend-item"><i class="dot" style="background:#0B3F5C"></i>Evaluación</span><span class="legend-item"><i class="dot" style="background:#9FA09A"></i>Psicología (generalistas)</span></div></div></header>
+<div class="toolbar">
+<button id="barBtn" class="active" type="button">Barras</button><button id="bubbleBtn" type="button">Burbujas temáticas</button>
+<select id="limit"><option value="10">Top 10</option><option value="15">Top 15</option><option value="25">Top 25</option><option value="999" selected>Todas</option></select>
+<select id="theme"><option value="">Todas las temáticas</option><option>Adicciones</option><option>Personalidad</option><option>Evaluación</option><option>Psicología (generalistas)</option></select>
+<select id="quartile"><option value="" selected>Todas</option><option value="Q1">Q1</option><option value="Q2">Q2</option><option value="Q3">Q3</option><option value="Q4">Q4</option><option value="Q1Q2">Q1 + Q2</option></select>
+<div class="time-inline" aria-label="Evolución temporal de las publicaciones">
+  <button id="playBtn" class="play-btn" type="button" aria-label="Reproducir evolución" title="Reproducir evolución">▶</button>
+  <div class="year-inline"><span>Año</span><strong id="yearLabel">2010</strong></div>
+  <div class="range-inline">
+    <span>2010</span>
+    <input id="yearRange" type="range" min="2010" max="2026" value="2010" step="1" aria-label="Seleccionar último año visible">
+    <span>2026</span>
+  </div>
+</div>
+<div class="timeline-metrics" aria-live="polite">
+  <span><b id="visibleJournals">0</b> revistas</span>
+  <span><b id="visibleArticles">0</b> JCR</span><span><b id="filteredArticles">0</b> visibles</span>
+  <span><b id="newJournals">0</b> nuevas</span>
+</div>
+</div>
+
+<main id="mainLayout"><section class="panel"><div id="chart" class="chart"></div></section><aside class="panel side" id="detail" aria-hidden="true"></aside></main>
+<footer>Visualización interactiva · v22.0 panel desplegable</footer>
+<script>
+
+const DATA=[{"journal":"Addictive Behaviors","count":6,"firstYear":2018,"lastYear":2024,"articles":[{"year":2024,"title":"Big Five Personality Traits, Gaming Motives, and Regular and Disordered Gaming: A Cross-National Examination among College Student Gamers in Seven Countries","quartile":"Q1","doi":"https://doi.org/10.1016/j.addbeh.2024.108049"},{"year":2023,"title":"Internalizing symptoms, rumination, and problematic social networking site use: A cross national examination among young adults in seven countries","quartile":"Q1","doi":"https://doi.org/10.1016/j.addbeh.2022.107464"},{"year":2023,"title":"Motives to play videogames across seven countries: Measurement invariance of the Videogame Motives Questionnaire","quartile":"Q1","doi":"https://doi.org/10.1016/j.addbeh.2023.107624"},{"year":2022,"title":"Quantifying cannabis problems among college students from English and Spanish speaking countries: Cross-cultural validation of the Cannabis Use Disorders Identification Test-Revised (CUDIT-R)","quartile":"Q1","doi":"https://doi.org/10.1016/j.addbeh.2021.107209"},{"year":2018,"title":"Depressive symptoms, ruminative thinking, drinking to cope, and negative alcohol-related consequences: A multiple mediation model among college students in three countries","quartile":"Q1","doi":"http://dx.doi.org/10.1016/j.addbeh.2017.08.028"},{"year":2018,"title":"Impulsivity-related traits, college alcohol beliefs, and alcohol outcomes: Examination of a prospective multiple mediation model among college students in Spain, Argentina, and USA","quartile":"Q1","doi":"http://dx.doi.org/10.1016/j.addbeh.2018.02.009"}],"dominantQuartile":"Q1","theme":"Adicciones"},{"journal":"Personality and Individual Differences","count":6,"firstYear":2010,"lastYear":2021,"articles":[{"year":2021,"title":"Mediational role of gaming motives in the associations of the Five Factor Model of personality with weekly and disordered gaming in adolescents","quartile":"Q2","doi":"https://doi.org/10.1016/j.paid.2021.111063"},{"year":2020,"title":"Five-Factor Model of personality and structure of psychopathological symptoms in adolescents","quartile":"Q2","doi":"https://doi.org/10.1016/j.paid.2020.110063"},{"year":2015,"title":"Five-Factor Model and alcohol outcomes: Mediating and moderating role of alcohol expectancies","quartile":"Q2","doi":"http://dx.doi.org/10.1016/j.paid.2014.10.002"},{"year":2015,"title":"Five-factor model and internalizing and externalizing syndromes: A 5-year prospective study","quartile":"Q2","doi":"https://doi.org/10.1016/j.paid.2015.02.002"},{"year":2010,"title":"Basic personality dimensions and alcohol consumption in young adults","quartile":"Q2","doi":"http://dx.doi.org/10.1016/j.paid.2009.09.017"},{"year":2010,"title":"Big-five personality domains predict internal drinking motives in young adults","quartile":"Q2","doi":"http://dx.doi.org/10.1016/j.paid.2010.03.043"}],"dominantQuartile":"Q2","theme":"Personalidad"},{"journal":"Adicciones","count":5,"firstYear":2016,"lastYear":2026,"articles":[{"year":2026,"title":"Social media addiction, personality, psychopathology, and gender: Cross-sectional and longitudinal findings in adolescents","quartile":"Q3","doi":"https://doi.org/10.20882/adicciones.2084"},{"year":2021,"title":"The role of personality on disordered gaming and game genre preferences in adolescence: gender differences and person-environment transactions","quartile":"Q2","doi":"http://dx.doi.org/10.20882/adicciones.1370"},{"year":2019,"title":"Development and validation of the Marijuana Motives Measure Short Form","quartile":"Q1","doi":"https://doi.org/10.20882/adicciones.979"},{"year":2018,"title":"Development and validation of the alcohol Expectancy Questionnaire Short Form (EQ-SF)","quartile":"Q1","doi":"https://doi.org/10.20882/adicciones.920"},{"year":2016,"title":"Cross-cultural examination of the five-factor model of drinking motives in Spanish and Canadian undergraduates","quartile":"Q2","doi":"http://doi.org/10.20882/adicciones.822"}],"dominantQuartile":"Q2","theme":"Adicciones"},{"journal":"Current Psychology","count":5,"firstYear":2020,"lastYear":2024,"articles":[{"year":2024,"title":"Individualism, collectivism, and emotion regulation: A cross-cultural examination among college students from seven countries","quartile":"Q1","doi":"https://doi.org/10.1007/s12144-024-06226-8"},{"year":2023,"title":"Adverse Childhood Experiences and Adulthood Mental Health: A Cross-Cultural Examination among University Students in Seven Countries","quartile":"Q2","doi":"https://doi.org/10.1007/s12144-022-02978-3"},{"year":2023,"title":"Examination of the latent structure of the Ruminative Thoughts Style Questionnaire across countries, gender, and over time","quartile":"Q2","doi":"https://doi.org/10.1007/s12144-022-03010-4"},{"year":2022,"title":"Validation of an Abridged, 60-item form of the Junior Spanish NEO Inventory (JS NEO-A60)","quartile":"Q2","doi":"https://doi.org/10.1007/s12144-020-01135-y"},{"year":2020,"title":"Cross-cultural examination of the Community Reinforcement Approach Happiness Scale (CRA-HS): Testing measurement invariance in five countries","quartile":"Q1","doi":"https://doi.org/10.1007/s12144-020-00818-w"}],"dominantQuartile":"Q2","theme":"Psicología (generalistas)"},{"journal":"European Journal of Psychological Assessment","count":4,"firstYear":2018,"lastYear":2025,"articles":[{"year":2025,"title":"Longitudinal Measurement Invariance of the DSM-5 Anxiety and Depression Severity Measures","quartile":"Q1","doi":"https://doi.org/10.1027/1015-5759/a000791"},{"year":2021,"title":"Development of a 50-item Abridged form of the Junior Spanish version of the NEO questionnaire (JS NEO-A50)","quartile":"Q3","doi":"https://doi.org/10.1027/1015-5759/a000648"},{"year":2019,"title":"Ruminating in English, ruminating in Spanish: Psychometric evaluation and validation of the Response Thoughts Style Questionnaire in Spain, Argentina, and USA","quartile":"Q3","doi":"http://dx.doi.org/10.1027/1015-5759/a000465"},{"year":2018,"title":"Psychometric properties of Drinking Motives Questionnaire-Revised (DMQ-R) in Spanish adolescents","quartile":"Q2","doi":"http://dx.doi.org/10.1027/1015-5759/a000319"}],"dominantQuartile":"Q3","theme":"Evaluación"},{"journal":"Plos One","count":4,"firstYear":2019,"lastYear":2021,"articles":[{"year":2021,"title":"Preliminary validity and reliability evidence of the Brief Antisocial Behavior Scale (B-ABS) in young adults from four countries","quartile":"Q2","doi":"https://doi.org/10.1371/journal.pone.0247528"},{"year":2020,"title":"The development and validation of the Videogaming Motives Questionnaire (VMQ)","quartile":"Q2","doi":"https://doi.org/10.1371/journal.pone.0240726"},{"year":2020,"title":"Personality and non judging make you happier: Contribution of the Five-Factor Model, mindfulness facets and a mindfulness intervention to subjective well-being","quartile":"Q2","doi":"https://doi.org/10.1371/journal.pone.0228655"},{"year":2019,"title":"Cross-cultural examination of the Big Five Personality Trait Short Questionnaire: Measurement invariance testing and associations with mental health","quartile":"Q2","doi":"https://doi.org/10.1371/journal.pone.0226223"}],"dominantQuartile":"Q2","theme":"Psicología (generalistas)"},{"journal":"Drug and Alcohol Dependence","count":3,"firstYear":2017,"lastYear":2019,"articles":[{"year":2019,"title":"Depressive symptoms, ruminative thinking, marijuana use motives, and marijuana outcomes: A multiple mediation model among college students in five countries","quartile":"Q1","doi":"https://doi.org/10.1016/j.drugalcdep.2019.107558"},{"year":2018,"title":"Cross-cultural examination of different etiological pathways to the alcohol use and misuse","quartile":"Q1","doi":"https://doi.org/10.1016/j.drugalcdep.2018.08.004"},{"year":2017,"title":"Cross-cultural examination of college drinking culture in Spain, Argentina, and USA: Measurement invariance testing of the College Life Alcohol Salience Scale","quartile":"Q1","doi":"http://dx.doi.org/10.1016/j.drugalcdep.2017.08.016"}],"dominantQuartile":"Q1","theme":"Adicciones"},{"journal":"Frontiers in Psychology","count":3,"firstYear":2015,"lastYear":2016,"articles":[{"year":2016,"title":"An investigation of five types of personality trait continuity: A two-wave longitudinal study of Spanish adolescents from age 12 to Age 15","quartile":"Q2","doi":"http://doi.org/10.3389/fpsyg.2016.00512"},{"year":2016,"title":"Take the money and run: Psychopathic behavior in the trust game","quartile":"Q2","doi":"http://doi.org/10.3389/fpsyg.2016.01866"},{"year":2015,"title":"Alcohol expectancies mediate and moderate the associations between big five personality traits and adolescent alcohol consumption and alcohol-related problems","quartile":"Q1","doi":"http://dx.doi.org/10.3389/fpsyg.2015.01838"}],"dominantQuartile":"Q2","theme":"Psicología (generalistas)"},{"journal":"Psicothema","count":3,"firstYear":2013,"lastYear":2024,"articles":[{"year":2024,"title":"The Spanish Short Dark Tetrad (SD4): Association with personality and psychological problems","quartile":"Q1","doi":"https://doi.org/10.7334/psicothema2023.172"},{"year":2021,"title":"Self-reported DSM-5 Anxiety Severity Measures: Evidence of Validity and Reliability in Spanish Youths","quartile":"Q1","doi":"https://doi.org/10.7334/psicothema2020.398"},{"year":2013,"title":"Spanish adaptation of the Expectancy Questionnaire (EQ) about alcohol effects in adolescents","quartile":"Q2","doi":"http://dx.doi.org/10.7334/psicothema2012.354"}],"dominantQuartile":"Q1","theme":"Psicología (generalistas)"},{"journal":"Spanish Journal of Psychology","count":3,"firstYear":2017,"lastYear":2026,"articles":[{"year":2026,"title":"Assessment of the Big Five from Adolescence to Adulthood: The catalan version of the Big Five Personality Trait Short Questionnaire","quartile":"Q2","doi":""},{"year":2018,"title":"Contribution of the Five Factors of Personality and peers on adolescent alcohol use: A cross-national study","quartile":"Q4","doi":"https://doi.org/10.1017/sjp.2018.63"},{"year":2017,"title":"Big Five Personality Trait Short Questionnaire: Preliminary validation with Spanish adults","quartile":"Q4","doi":"http://doi.org/10.1017/sjp.2017.8"}],"dominantQuartile":"Q4","theme":"Psicología (generalistas)"},{"journal":"Addictive Behaviors Reports","count":2,"firstYear":2021,"lastYear":2026,"articles":[{"year":2026,"title":"The mediating role of motives in the associations between the Big Five personality traits and marijuana outcomes: A cross-national study across four countries","quartile":"Q2","doi":"https://doi.org/10.1016/j.abrep.2026.100712"},{"year":2021,"title":"Young adult concurrent use and simultaneous use of alcohol and marijuana: A cross-cultural examination among college students in seven countries","quartile":"Q2","doi":"https://doi.org/10.1016/j.abrep.2021.100373"}],"dominantQuartile":"Q2","theme":"Adicciones"},{"journal":"Assessment","count":2,"firstYear":2012,"lastYear":2020,"articles":[{"year":2020,"title":"Recent Stressful Life Events (SLE) and Adolescent Mental Health: Initial Validation of the LEIA, a New Checklist for SLE","quartile":"Q1","doi":"http://dx.doi.org/10.1177/1073191118817648"},{"year":2012,"title":"Assessing the five factors of personality in adolescents: the junior version of the Spanish NEO-PI-R","quartile":"Q1","doi":"http://dx.doi.org/10.1177/1073191111410166"}],"dominantQuartile":"Q1","theme":"Evaluación"},{"journal":"International Journal of Clinical and Health Psychology","count":2,"firstYear":2010,"lastYear":2022,"articles":[{"year":2022,"title":"Neuroticism, rumination, depression and suicidal ideation: a moderated serial mediation model across four countries","quartile":"Q1","doi":"https://doi.org/10.1016/j.ijchp.2022.100325"},{"year":2010,"title":"Versión corta de la adaptación Española para adolescentes del NEO-PI-R (JS NEO-S)","quartile":"Q2","doi":"https://www.redalyc.org/pdf/337/33712250008.pdf"}],"dominantQuartile":"Q2","theme":"Psicología (generalistas)"},{"journal":"International Journal of Mental Health and Addiction","count":2,"firstYear":2023,"lastYear":2024,"articles":[{"year":2024,"title":"Age of first use, age of habitual use, and problematic alcohol use: A cross-cultural examination among young adults in seven countries","quartile":"Q2","doi":"https://doi.org/10.1007/s11469-023-01016-y"},{"year":2023,"title":"Drinking motives as mediators of the relationship of cultural orientation with alcohol use and alcohol-related negative consequences in college students from seven countries. International","quartile":"Q1","doi":"https://doi.org/10.1007/s11469-022-00789-y"}],"dominantQuartile":"Q1","theme":"Adicciones"},{"journal":"Psychological Assessment","count":2,"firstYear":2019,"lastYear":2022,"articles":[{"year":2022,"title":"Assessment of “los Pequeños” Big Five: The Spanish Version of the Big Five Personality Trait Short Questionnaire in Adolescents","quartile":"Q2","doi":"http://dx.doi.org/10.1037/pas0001119"},{"year":2019,"title":"Cross-cultural examination of negative alcohol-related consequences: Measurement invariance testing of the Young Adult Alcohol Consequences Questionnaire in Spain, Argentina, and USA","quartile":"Q2","doi":"http://dx.doi.org/10.1037/pas0000689"}],"dominantQuartile":"Q2","theme":"Evaluación"},{"journal":"Substance Use and Misuse","count":2,"firstYear":2023,"lastYear":2023,"articles":[{"year":2023,"title":"Childhood traumatic experiences and negative alcohol-related consequences in adulthood: A cross-cultural examination of distress tolerance and drinking to cope","quartile":"Q3","doi":"https://doi.org/10.1080/10826084.2023.2188563"},{"year":2023,"title":"Utility of the Brief Young Adult Alcohol Consequences Questionnaire to identify college students at-risk for alcohol related problems: Relative Operating Characteristics across seven countries","quartile":"Q3","doi":"https://doi.org/10.1080/10826084.2023.2238307"}],"dominantQuartile":"Q3","theme":"Adicciones"},{"journal":"Addiction","count":1,"firstYear":2019,"lastYear":2019,"articles":[{"year":2019,"title":"Negative Marijuana-related Consequences among College Students in Five Countries: Measurement Invariance of the Brief Marijuana Consequences Questionnaire","quartile":"Q1","doi":"https://doi.org/10.1111/add.14646"}],"dominantQuartile":"Q1","theme":"Adicciones"},{"journal":"Alcoholism, Clinical and Experimental Research","count":1,"firstYear":2014,"lastYear":2014,"articles":[{"year":2014,"title":"A longitudinal examination of different etiological pathways to alcohol use and misuse","quartile":"Q2","doi":"http://dx.doi.org/10.1111/acer.12419"}],"dominantQuartile":"Q2","theme":"Adicciones"},{"journal":"Annals of Psychology","count":1,"firstYear":2018,"lastYear":2018,"articles":[{"year":2018,"title":"Five factor model of personality disorders: Spanish normative data and preliminary validation","quartile":"Q3","doi":"http://dx.doi.org/10.6018/analesps.34.2.289271"}],"dominantQuartile":"Q3","theme":"Psicología (generalistas)"},{"journal":"Behavior Genetics","count":1,"firstYear":2018,"lastYear":2018,"articles":[{"year":2018,"title":"Effects of social attitude change on heritability of smoking","quartile":"Q2","doi":"http://dx.doi.org/10.1007/s10519-017-9871-1"}],"dominantQuartile":"Q2","theme":"Psicología (generalistas)"},{"journal":"Cyberpsychology, Behavior, and Social Networking","count":1,"firstYear":2021,"lastYear":2021,"articles":[{"year":2021,"title":"The role of violent videogame exposure, personality and deviant peers in aggressive behaviors among adolescents: a two-wave longitudinal study","quartile":"Q1","doi":"https://doi.org/10.1089/cyber.2020.0030"}],"dominantQuartile":"Q1","theme":"Psicología (generalistas)"},{"journal":"European Addiction Research","count":1,"firstYear":2011,"lastYear":2011,"articles":[{"year":2011,"title":"Drinking motives in clinical and general populations","quartile":"Q1","doi":"http://dx.doi.org/10.1159/000328510"}],"dominantQuartile":"Q1","theme":"Adicciones"},{"journal":"European Child & Adolescent Psychiatry","count":1,"firstYear":2017,"lastYear":2017,"articles":[{"year":2017,"title":"Stressful life events during adolescence and risk for externalizing and internalizing psychopathology: a meta-analysis","quartile":"Q1","doi":"http://doi.org/10.1007/s00787-017-0996-9"}],"dominantQuartile":"Q1","theme":"Psicología (generalistas)"},{"journal":"Journal of Psychopathology and Behavioral Assessment","count":1,"firstYear":2021,"lastYear":2021,"articles":[{"year":2021,"title":"Longitudinal Associations Between the Five-Factor Model of Personality and The Bi-Factor Model of Psychopathology: Continuity, Pathoplasty and Complication Effects in Adolescents","quartile":"Q3","doi":"https://doi.org/10.1007/s10862-021-09903-1"}],"dominantQuartile":"Q3","theme":"Evaluación"},{"journal":"Journal of Research in Personality","count":1,"firstYear":2022,"lastYear":2022,"articles":[{"year":2022,"title":"Personality development and its associations with the bifactor model of psychopathology in adolescence","quartile":"Q2","doi":"https://doi.org/10.1016/j.jrp.2022.104205"}],"dominantQuartile":"Q2","theme":"Personalidad"},{"journal":"Journal of Studies on Alcohol and Drugs","count":1,"firstYear":2021,"lastYear":2021,"articles":[{"year":2021,"title":"Cannabis-related Perceptions as Mediators of the Association between Trait Impulsivity and Cannabis Outcomes","quartile":"Q2","doi":"http://dx.doi.org/10.15288/jsad.2021.82.522"}],"dominantQuartile":"Q2","theme":"Adicciones"},{"journal":"Mindfulness","count":1,"firstYear":2023,"lastYear":2023,"articles":[{"year":2023,"title":"Validation of the Spanish Version of the Five Facet Mindfulness Questionnaire in a Sample of Argentinian College Students","quartile":"Q1","doi":"https://doi.org/10.1007/s12671-023-02152-1"}],"dominantQuartile":"Q1","theme":"Psicología (generalistas)"},{"journal":"Psychological Medicine","count":1,"firstYear":2016,"lastYear":2016,"articles":[{"year":2016,"title":"Childhood trauma and the rs1360780 SNP of FKBP5 gene in psychosis: a replication in two general population samples","quartile":"Q1","doi":"http://dx.doi.org/10.1017/S0033291715001695"}],"dominantQuartile":"Q1","theme":"Psicología (generalistas)"},{"journal":"Revista Española de Salud Pública","count":1,"firstYear":2013,"lastYear":2013,"articles":[{"year":2013,"title":"Moro, M., & Mezquita, L. (2013a). Development and validation of BECAD. An instrument derived from the International Classification of Functioning, Disability and Health","quartile":"Q4","doi":"http://dx.doi.org/10.4321/S1135-57272013000100003"}],"dominantQuartile":"Q4","theme":"Psicología (generalistas)"},{"journal":"Schizophrenia Research","count":1,"firstYear":2013,"lastYear":2013,"articles":[{"year":2013,"title":"Cognition and the five-factor model of the positive and negative syndrome scale in schizophrenia","quartile":"Q1","doi":"http://dx.doi.org/10.1016/j.schres.2012.10.020"}],"dominantQuartile":"Q1","theme":"Psicología (generalistas)"},{"journal":"The American Journal of Drug and Alcohol Abuse","count":1,"firstYear":2022,"lastYear":2022,"articles":[{"year":2022,"title":"A cross-national examination of cannabis protective behavioral strategies’ role in the relationship between Big Five personality traits and cannabis outcomes","quartile":"Q3","doi":"https://doi.org/10.1080/00952990.2021.1919689"}],"dominantQuartile":"Q3","theme":"Adicciones"}];
+const COLORS={"Adicciones":"#EAB51D","Personalidad":"#19B94B","Evaluación":"#0B3F5C","Psicología (generalistas)":"#9FA09A"};
+
+let mode='bar';
+let animationFrame=null;
+let playTimer=null;
+let selectedJournal=null;
+const bubbleState=new Map();
+let bubbleGeneration=0;
+
+const chart=document.getElementById('chart');
+const detail=document.getElementById('detail');
+const mainLayout=document.getElementById('mainLayout');
+const barBtn=document.getElementById('barBtn');
+const bubbleBtn=document.getElementById('bubbleBtn');
+const limit=document.getElementById('limit');
+const theme=document.getElementById('theme');
+const quartile=document.getElementById('quartile');
+const playBtn=document.getElementById('playBtn');
+const yearRange=document.getElementById('yearRange');
+const yearLabel=document.getElementById('yearLabel');
+const visibleJournals=document.getElementById('visibleJournals');
+const visibleArticles=document.getElementById('visibleArticles');
+const newJournals=document.getElementById('newJournals');
+const filteredArticles=document.getElementById('filteredArticles');
+
+function mixWithWhite(hex,t){
+  const n=parseInt(hex.slice(1),16);
+  const r=n>>16, g=n>>8&255, b=n&255;
+  const mix=v=>Math.round(255+(v-255)*t);
+  return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
+}
+
+function matchesQuartile(article,value){
+  if(!value) return true;
+  if(value==='Q1Q2') return article.quartile==='Q1'||article.quartile==='Q2';
+  return article.quartile===value;
+}
+
+function dominantQuartile(articles){
+  const counts={};
+  articles.forEach(a=>{ if(a.quartile) counts[a.quartile]=(counts[a.quartile]||0)+1; });
+  const preferred=['Q1','Q2','Q3','Q4','Sin cuartil'];
+  return preferred.sort((a,b)=>(counts[b]||0)-(counts[a]||0))[0]||'—';
+}
+
+function cumulativeJournal(source,year){
+  const articles=source.articles.filter(a=>a.year<=year).sort((a,b)=>b.year-a.year);
+  if(!articles.length) return null;
+  return {
+    ...source,
+    articles,
+    count:articles.length,
+    firstYear:Math.min(...articles.map(a=>a.year)),
+    lastYear:Math.max(...articles.map(a=>a.year)),
+    dominantQuartile:dominantQuartile(articles)
+  };
+}
+
+function rows(){
+  const selectedTheme=theme.value;
+  const selectedQuartile=quartile.value;
+  const year=Number(yearRange.value);
+
+  return DATA
+    .map(d=>cumulativeJournal(d,year))
+    .filter(Boolean)
+    .filter(d=>!selectedTheme||d.theme===selectedTheme)
+    .filter(d=>!selectedQuartile||d.articles.some(a=>matchesQuartile(a,selectedQuartile)))
+    .sort((a,b)=>b.count-a.count||a.journal.localeCompare(b.journal))
+    .slice(0,Number(limit.value));
+}
+
+function updateTimelineStats(renderedRows){
+  const year=Number(yearRange.value);
+  yearLabel.textContent=year;
+  const cumulativeAll=DATA.map(d=>cumulativeJournal(d,year)).filter(Boolean);
+  visibleJournals.textContent=cumulativeAll.length;
+  visibleArticles.textContent=cumulativeAll.reduce((sum,d)=>sum+d.count,0);
+  filteredArticles.textContent=renderedRows.reduce((sum,d)=>sum+d.count,0);
+
+  const selectedTheme=theme.value;
+  const selectedQuartile=quartile.value;
+  const count=DATA.filter(d=>{
+    if(d.firstYear!==year) return false;
+    if(selectedTheme&&d.theme!==selectedTheme) return false;
+    if(selectedQuartile&&!d.articles.some(a=>a.year<=year&&matchesQuartile(a,selectedQuartile))) return false;
+    return true;
+  }).length;
+  newJournals.textContent=count;
+}
+
+function formatPeriod(firstYear,lastYear){
+  return firstYear===lastYear ? String(firstYear) : `${firstYear}–${lastYear}`;
+}
+
+function closeDetail(){
+  selectedJournal=null;
+  mainLayout.classList.remove('detail-open');
+  detail.setAttribute('aria-hidden','true');
+  detail.innerHTML='';
+  chart.querySelectorAll('.bubble').forEach(el=>el.classList.remove('is-selected','is-dimmed'));
+  chart.querySelectorAll('.bar-row').forEach(el=>el.classList.remove('is-selected'));
+  if(mode==='bubble') window.setTimeout(render,20);
+}
+function openDetail(){
+  mainLayout.classList.add('detail-open');
+  detail.setAttribute('aria-hidden','false');
+}
+function show(d){
+  selectedJournal=d.journal;
+  openDetail();
+  const color=COLORS[d.theme];
+  const selectedQuartile=quartile.value;
+  const displayedArticles=selectedQuartile
+    ? d.articles.filter(a=>matchesQuartile(a,selectedQuartile))
+    : d.articles;
+
+  const articleHtml=displayedArticles.length
+    ? displayedArticles.map(a=>{
+        const title=a.doi
+          ? `<a class="article-title" href="${a.doi}" target="_blank" rel="noopener">${a.title}</a>`
+          : `<span class="article-title">${a.title}</span>`;
+        return `<div class="article">${title}<div>${a.year}${a.quartile?' · '+a.quartile:''}</div></div>`;
+      }).join('')
+    : '<div class="empty">No hay artículos para el cuartil seleccionado en este periodo.</div>';
+
+  detail.innerHTML=`
+    <button class="detail-close" type="button" aria-label="Cerrar panel" title="Cerrar panel">×</button>
+    <h2>${d.journal}</h2>
+    <span class="theme-badge" style="background:${color}">${d.theme}</span>
+    <div class="meta">
+      <div class="metric" style="border-color:${color}"><b>${d.count}</b><small>artículos acumulados</small></div>
+      <div class="metric" style="border-color:${color}"><b>${formatPeriod(d.firstYear,d.lastYear)}</b><small>periodo visible</small></div>
+      <div class="metric" style="border-color:${color}"><b>${d.dominantQuartile}</b><small>cuartil predominante</small></div>
+      <div class="metric" style="border-color:${color}"><b>${d.articles.filter(a=>a.quartile==='Q1').length}</b><small>artículos Q1</small></div>
+    </div>
+    <h3>Artículos publicados</h3>
+    ${articleHtml}
+  `;
+  detail.querySelector('.detail-close').addEventListener('click',closeDetail);
+}
+
+function bars(renderedRows){
+  if(animationFrame) cancelAnimationFrame(animationFrame);
+  bubbleState.clear();
+  animationFrame=null;
+  chart.className='chart';
+
+  if(!renderedRows.length){
+    chart.innerHTML='<div class="empty">No hay resultados.</div>';
+    return;
+  }
+
+  const max=Math.max(...renderedRows.map(d=>d.count),1);
+  chart.innerHTML=renderedRows.map(d=>`
+    <div class="bar-row" data-journal="${encodeURIComponent(d.journal)}">
+      <div class="label">${d.journal} <small style="color:${COLORS[d.theme]}">●</small></div>
+      <div class="track"><div class="fill" style="width:${100*d.count/max}%;background:${mixWithWhite(COLORS[d.theme],.48+.52*d.count/max)}"></div></div>
+      <div class="value">${d.count}</div>
+    </div>
+  `).join('');
+
+  chart.querySelectorAll('.bar-row').forEach(row=>{
+    row.addEventListener('click',()=>{
+      const journal=decodeURIComponent(row.dataset.journal);
+      const current=renderedRows.find(d=>d.journal===journal);
+      if(current){
+        chart.querySelectorAll('.bar-row').forEach(el=>el.classList.toggle('is-selected',el===row));
+        show(current);
+      }
+    });
+  });
+}
+
+function bubbles(renderedRows){
+  if(animationFrame) cancelAnimationFrame(animationFrame);
+  animationFrame=null;
+
+  // Al entrar desde la vista de barras, desmontar por completo sus nodos.
+  // Así nunca quedan filas o pistas de barras visibles detrás de las burbujas.
+  if(chart.querySelector('.bar-row') || chart.classList.contains('chart')){
+    chart.replaceChildren();
+    bubbleState.clear();
+  }
+  chart.className='bubble-wrap';
+
+  if(!renderedRows.length){
+    bubbleState.forEach(node=>node.el?.remove());
+    bubbleState.clear();
+    chart.innerHTML='<div class="empty">No hay resultados.</div>';
+    return;
+  }
+
+  const empty=chart.querySelector('.empty');
+  if(empty) empty.remove();
+
+  const width=Math.max(chart.clientWidth,620);
+  const height=Math.max(390,Math.min(440,window.innerHeight-205));
+  const max=Math.max(...renderedRows.map(d=>d.count),1);
+  // Centros temáticos alineados en una única franja horizontal y más próximos entre sí.
+  // Se conserva el formato panorámico, pero se reduce el espacio vacío entre grupos.
+  const centers={
+    "Psicología (generalistas)":[.19,.50],
+    "Personalidad":[.39,.50],
+    "Evaluación":[.61,.50],
+    "Adicciones":[.81,.50]
+  };
+  const active=new Set(renderedRows.map(d=>d.journal));
+  const generation=++bubbleGeneration;
+
+  // Desvanecer las revistas que dejan de estar visibles, sin desmontar bruscamente el mapa.
+  bubbleState.forEach((node,journal)=>{
+    if(!active.has(journal)){
+      node.el.style.opacity='0';
+      node.el.style.pointerEvents='none';
+      window.setTimeout(()=>{
+        if(bubbleGeneration===generation && !active.has(journal)){
+          node.el.remove();
+          bubbleState.delete(journal);
+        }
+      },520);
+    }
+  });
+
+  const nodes=renderedRows.map((d,i)=>{
+    const targetSize=44+68*Math.sqrt(d.count/max);
+    const center=centers[d.theme]||[.5,.5];
+    let node=bubbleState.get(d.journal);
+
+    if(!node){
+      const angle=(i+1)*2.399963;
+      const radial=14+7*(i%4);
+      const bubble=document.createElement('button');
+      bubble.className='bubble';
+      bubble.type='button';
+      bubble.style.opacity='0';
+      chart.appendChild(bubble);
+      node={
+        d,
+        size:Math.max(38,targetSize*.72),
+        targetSize,
+        x:center[0]*width+Math.cos(angle)*radial,
+        y:center[1]*height+Math.sin(angle)*radial,
+        vx:0,vy:0,
+        tx:center[0]*width,
+        ty:center[1]*height,
+        el:bubble,
+        isNew:true
+      };
+      bubbleState.set(d.journal,node);
+      requestAnimationFrame(()=>{ bubble.style.opacity='1'; });
+    } else {
+      node.d=d;
+      node.targetSize=targetSize;
+      node.tx=center[0]*width;
+      node.ty=center[1]*height;
+      node.el.style.opacity='1';
+      node.el.style.pointerEvents='auto';
+      node.isNew=false;
+    }
+
+    const bubble=node.el;
+    bubble.setAttribute('aria-label',`${d.journal}: ${d.count} artículos`);
+    bubble.innerHTML=`<span>${d.journal}<br><b>${d.count}</b></span>`;
+    bubble.style.background=mixWithWhite(COLORS[d.theme],.42+.58*d.count/max);
+    const detailVisible=mainLayout.classList.contains('detail-open');
+    bubble.classList.toggle('is-selected',detailVisible&&selectedJournal===d.journal);
+    bubble.classList.toggle('is-dimmed',Boolean(detailVisible&&selectedJournal&&selectedJournal!==d.journal));
+
+    if(!bubble.dataset.bound){
+      bubble.dataset.bound='1';
+      bubble.addEventListener('click',()=>{
+        const current=bubbleState.get(d.journal);
+        if(!current) return;
+        selectedJournal=current.d.journal;
+        chart.querySelectorAll('.bubble').forEach(other=>{
+          other.classList.toggle('is-selected',other===bubble);
+          other.classList.toggle('is-dimmed',other!==bubble);
+        });
+        detail.classList.add('updating');
+        window.setTimeout(()=>{
+          show(current.d);
+          detail.classList.remove('updating');
+        },120);
+      });
+    }
+    return node;
+  });
+
+  let ticks=0;
+  function tick(){
+    ticks+=1;
+
+    // Atracción muy suave: conserva el mapa mental y evita saltos al avanzar un año.
+    for(const node of nodes){
+      const pullX=node.isNew ? .0058 : .0024;
+      const pullY=node.isNew ? .0017 : .00055;
+      node.vx+=(node.tx-node.x)*pullX;
+      node.vy+=(node.ty-node.y)*pullY;
+      node.size+=(node.targetSize-node.size)*.085;
+    }
+
+    // Colisiones amortiguadas, repartidas entre ambos nodos.
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        const dx=b.x-a.x, dy=b.y-a.y;
+        const distance=Math.hypot(dx,dy)||1;
+        const minimum=(a.size+b.size)/2+5;
+        if(distance<minimum){
+          const overlap=(minimum-distance)/minimum;
+          const force=overlap*.018;
+          const horizontalBias=1.48;
+          const verticalBias=.54;
+          a.vx-=dx/distance*force*minimum*horizontalBias;
+          a.vy-=dy/distance*force*minimum*verticalBias;
+          b.vx+=dx/distance*force*minimum*horizontalBias;
+          b.vy+=dy/distance*force*minimum*verticalBias;
+        }
+      }
+    }
+
+    let moving=false;
+    for(const node of nodes){
+      node.vx*=.90;
+      node.vy*=.84;
+      node.x+=node.vx;
+      node.y+=node.vy;
+      node.x=Math.max(node.size/2+3,Math.min(width-node.size/2-3,node.x));
+      node.y=Math.max(node.size/2+3,Math.min(height-node.size/2-3,node.y));
+      node.el.style.width=node.size+'px';
+      node.el.style.height=node.size+'px';
+      node.el.style.left=(node.x-node.size/2)+'px';
+      node.el.style.top=(node.y-node.size/2)+'px';
+      if(Math.abs(node.vx)+Math.abs(node.vy)>.035 || Math.abs(node.targetSize-node.size)>.08) moving=true;
+      node.isNew=false;
+    }
+
+    if(ticks<240 && moving) animationFrame=requestAnimationFrame(tick);
+  }
+  tick();
+}
+function render(){
+  const renderedRows=rows();
+  updateTimelineStats(renderedRows);
+
+  if(mode==='bar') bars(renderedRows);
+  else bubbles(renderedRows);
+
+  const current=renderedRows.find(d=>d.journal===selectedJournal);
+  if(current && mainLayout.classList.contains('detail-open')) show(current);
+  else if(selectedJournal && !current) closeDetail();
+}
+
+function stopPlayback(){
+  if(playTimer) window.clearInterval(playTimer);
+  playTimer=null;
+  playBtn.classList.remove('playing');
+  playBtn.textContent='▶';
+  playBtn.setAttribute('aria-label','Reproducir evolución');
+  playBtn.title='Reproducir evolución';
+}
+
+function startPlayback(){
+  if(Number(yearRange.value)>=2026) yearRange.value=2010;
+  playBtn.classList.add('playing');
+  playBtn.textContent='❚❚';
+  playBtn.setAttribute('aria-label','Pausar evolución');
+  playBtn.title='Pausar evolución';
+  render();
+
+  playTimer=window.setInterval(()=>{
+    const next=Number(yearRange.value)+1;
+    if(next>2026){
+      stopPlayback();
+      return;
+    }
+    yearRange.value=next;
+    render();
+  },1250);
+}
+
+barBtn.addEventListener('click',()=>{
+  closeDetail();
+  mode='bar';
+  barBtn.classList.add('active');
+  bubbleBtn.classList.remove('active');
+  render();
+});
+
+bubbleBtn.addEventListener('click',()=>{
+  closeDetail();
+  mode='bubble';
+  bubbleBtn.classList.add('active');
+  barBtn.classList.remove('active');
+  render();
+});
+
+playBtn.addEventListener('click',()=>{
+  if(playTimer) stopPlayback();
+  else startPlayback();
+});
+
+yearRange.addEventListener('input',()=>{
+  stopPlayback();
+  render();
+});
+
+[limit,theme,quartile].forEach(control=>control.addEventListener('change',render));
+window.addEventListener('resize',()=>{ if(mode==='bubble') render(); });
+window.addEventListener('beforeunload',stopPlayback);
+
+render();
+
+</script>
+
+<script id="click-outside-close-journals">
+document.addEventListener('click', function(ev){
+  const main=document.getElementById('mainLayout');
+  const detail=document.getElementById('detail');
+  if(!main || !detail || !main.classList.contains('detail-open')) return;
+  if(detail.contains(ev.target)) return;
+  /* Do not close on elements that open/select a journal */
+  if(ev.target.closest('.bubble,.bar-row,[data-journal]')) return;
+  if(typeof closeDetail==='function') closeDetail();
+});
+</script>
+
+</body></html>

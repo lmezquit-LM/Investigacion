@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Internacionalización y colaboraciones</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root{--bg:#fff;--panel:#fff;--ink:#12394f;--muted:#666b70;--line:#d8d9d4;--accent:#0B3F5C;--green:#19B94B;--warm:#9FA09A;--yellow:#EAB51D;--r:14px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Montserrat,'Avenir Next','Segoe UI',Arial,sans-serif;color:var(--ink);background:#fff}
+#app{height:100vh;min-height:430px;display:grid;grid-template-rows:auto 1fr}
+.top{background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;display:flex;gap:7px;align-items:center}
+.tab{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 12px;font:inherit;font-weight:650;cursor:pointer}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.view{display:none;min-height:0}.view.active{display:block}
+#staysView{padding:10px;height:100%}.staysGrid{height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) clamp(270px,31vw,430px);gap:10px}
+.stage,.side{min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+#staysPlot{width:100%;height:100%}.side{padding:13px;overflow:auto}.side h2{font-size:17px;margin:0 0 4px}.side h3{font-size:13px;margin:15px 0 5px;color:var(--accent);text-transform:uppercase;letter-spacing:.035em}
+.meta,.hint{font-size:12px;color:var(--muted);line-height:1.45}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.kpis div{background:#f5f6f4;border-radius:9px;padding:8px;border-left:4px solid var(--green)}.kpis strong{display:block;font-size:17px}.stayline{padding:6px 0;font-size:12px}
+.item{padding:8px 0;border-top:1px solid var(--line)}.item a,.item b{font-size:12.5px;font-weight:650;color:var(--accent);text-decoration:none}.item div{font-size:11.5px;color:var(--muted);margin-top:3px}
+.funding{margin-top:7px;padding:10px 11px;background:#f5f6f4;border-left:5px solid var(--green);border-radius:8px}.funding div{font-size:12px;line-height:1.45;margin:3px 0}.funding .amount{font-size:15px;font-weight:800;color:var(--accent)}iframe{width:100%;height:100%;border:0;background:#fff}
+@media(max-width:720px){.top{flex-wrap:wrap}.staysGrid{grid-template-columns:1fr;grid-template-rows:minmax(250px,1fr) minmax(170px,43%)}}
+</style>
+<style id="genially-embed-style">
+:root{--bg:#fff!important;--blue:#0B3F5C;--green:#19B94B;--gold:#EAB51D;--yellow:#EAB51D;--grey:#9FA09A}
+html,body{background:#fff!important;min-height:100%;overflow-x:hidden}
+.page{max-width:none!important;margin:0!important;padding:12px 14px 16px!important}
+.panel,.metric,.card,.timeline-wrap,.drawer-card{background:#fff!important;box-shadow:0 8px 24px rgba(11,63,92,.07)!important}
+.home,.version{display:none!important}
+@media(max-width:700px){.page{padding:8px!important}}
+</style>
+
+<style id="estancias-colaboraciones-tabs">
+.genially-tabs{justify-content:flex-end;gap:8px;padding:8px 10px 6px;border-bottom:0;background:#fff}
+.genially-tabs .tab{padding:7px 12px;border:1px solid #dbe4e6;background:#fff;border-radius:999px;
+color:#0B3F5C;font-size:11px;font-weight:800}
+.genially-tabs .tab.active{background:#0B3F5C;border-color:#0B3F5C;color:#fff}
+#collabView{height:100%;padding:0 10px 10px}
+#collabView iframe{display:block;width:100%;height:100%;border:0;border-radius:14px}
+</style>
+
+<style id="additive-networks-only">
+#networksView{height:100%;padding:10px}
+.networksWrap{height:100%;display:grid;grid-template-rows:auto 1fr;gap:12px}
+.networkKpi{display:flex;align-items:baseline;gap:10px;padding:6px 4px;color:#64777f}
+.networkKpi strong{font-size:30px;color:#19B94B;line-height:1}.networkKpi span{font-size:13px;font-weight:650}
+.networkGrid{min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.networkCard{position:relative;border:1px solid #dbe4e6;border-radius:18px;background:#fff;padding:24px 26px;box-shadow:0 10px 28px rgba(11,63,92,.07);overflow:hidden}
+.networkCard:before{content:"";position:absolute;left:0;top:0;right:0;height:6px;background:#0B3F5C}.networkCard:nth-child(2):before{background:#19B94B}
+.networkTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.networkAcronym{font-size:30px;font-weight:900;color:#0B3F5C}.networkCard:nth-child(2) .networkAcronym{color:#19B94B}
+.networkYears{font-size:12px;font-weight:800;color:#64777f;background:#f4f7f7;border-radius:999px;padding:7px 10px}
+.networkCard h3{font-size:18px;line-height:1.25;color:#18313d;margin:22px 0 8px}
+.networkInstitution{font-size:13px;color:#64777f;font-weight:700}
+.networkCoordinator{font-size:12px;color:#64777f;margin-top:7px;font-weight:400}
+@media(max-width:760px){.networkGrid{grid-template-columns:1fr}.networkCard{padding:18px}.networkAcronym{font-size:24px}}
+</style>
+
+<style id="stay-work-titles-final">
+.item .stayWorkTitle,
+.item a.stayWorkTitle,
+.item span.stayWorkTitle{
+  display:inline!important;
+  color:#0B3F5C!important;
+  font-size:12.5px!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+  text-decoration:none!important;
+}
+</style>
+</head>
+<body><div id="app">
+<div class="top genially-tabs">
+<button class="tab active" data-target="staysView">Estancias</button>
+<button class="tab" data-target="collabView">Colaboraciones</button>
+<button class="tab" data-target="networksView">Redes de cooperación</button>
+</div>
+
+
+<section id="staysView" class="view active">
+<div class="staysGrid">
+<div class="stage"><div id="staysPlot"></div></div>
+<aside class="side" id="staySide">
+<h2>Estancias de investigación</h2>
+<div class="hint">Selecciona una localización para consultar la estancia y la producción científica relacionada.</div><div class="durationSummary"><strong>Duración de las estancias</strong><br>Halifax: 2009 · 3 meses; 2010 · 2 meses<br>Minnesota: 2013 · 4 meses<br>Murcia: 2014 · 2 meses</div>
+<div class="kpis"><div><span class="meta">estancias</span><strong>4</strong></div><div><span class="meta">localizaciones</span><strong>3</strong></div><div><span class="meta">meses</span><strong>11</strong></div></div>
+</aside>
+</div></section>
+<section id="collabView" class="view"><iframe id="collabFrame" src="./colaboraciones.html" title="Colaboraciones internacionales"></iframe></section>
+
+<section id="networksView" class="view">
+  <div class="networksWrap">
+    <div class="networkKpi"><strong>2</strong><span>redes de cooperación activas</span></div>
+    <div class="networkGrid">
+<article class="networkCard">
+  <div class="networkTop"><span class="networkAcronym">CAST</span><span class="networkYears">2015 → actualidad</span></div>
+  <h3>Cross-Cultural Addictions Study Team</h3>
+  <div class="networkInstitution">College of William and Mary</div>
+  <div class="networkCoordinator">Coordinado por el Dr. Adrian J. Bravo</div>
+</article>
+<article class="networkCard">
+  <div class="networkTop"><span class="networkAcronym">CIBERSAM</span><span class="networkYears">2017 → actualidad</span></div>
+  <h3>Centro de Investigación Biomédica en Red – Salud Mental (CIBERSAM)</h3>
+  <div class="networkInstitution">Instituto de Salud Carlos III</div>
+  <div class="networkCoordinator">Coordinadora actual: Dra. Bárbara Arias</div>
+</article></div>
+  </div>
+</section>
+
+</div>
+<script>
+const STAYS=[{"id":"dalhousie","city":"Halifax","country":"Canadá","institution":"Dalhousie University","lat":44.6488,"lon":-63.5752,"duration":"5 meses en total","periods":["2009 · 3 meses · Estudio transcultural de los motivos para consumir alcohol","2010 · 2 meses · Variables psicológicas relacionadas con el consumo de alcohol en jóvenes universitarios"],"hosts":["Sherry H. Stewart"],"publications":[{"year":2010,"title":"Big-five personality domains predict internal drinking motives in young adults","venue":"Personality and Individual Differences","url":"http://dx.doi.org/10.1016/j.paid.2010.03.043"},{"year":2011,"title":"Drinking motives in clinical and general populations","venue":"European Addiction Research","url":"http://dx.doi.org/10.1159/000328510"},{"year":2016,"title":"Cross-cultural examination of the five-factor model of drinking motives in Spanish and Canadian undergraduates","venue":"Adicciones","url":"http://doi.org/10.20882/adicciones.822"}],"congresses":[{"year":2009,"title":"Cross-national study of drinking motives in Canadian and Spanish undergraduate samples using the Modified Drinking Motives Questionnaire-Revised","venue":"KBS Episodic Heavy Drinking among Adolescents, Nijmegen","url":""},{"year":2010,"title":"Estudio de las motivaciones para el uso del alcohol en población general y clínica","venue":"VIII Congreso Internacional de la Sociedad Española para el Estudio de la Ansiedad y el Estrés","url":""}],"funding":[{"code":"E-2009-05","title":"Estudio transcultural de motivos por los que las personas consumen alcohol","amount":"4.935 €"},{"code":"E-2010-12","title":"Estudio de variables psicológicas relacionadas con el consumo de alcohol en jóvenes universitarios","amount":"3.600 €"}]},{"id":"minnesota","city":"Minnesota","country":"Estados Unidos","institution":"University of Minnesota","lat":44.9778,"lon":-93.265,"duration":"4 meses","periods":["2013 · 4 meses · Estructura de la psicopatología y su relación con la personalidad: estudios transversales, prospectivos y de gemelos"],"hosts":["Robert F. Krueger","William G. Iacono","Matt McGue"],"publications":[],"congresses":[{"year":2014,"title":"Personality, alcohol expectancies and alcohol outcomes: A twin study in young adult men","venue":"III Jornada AIIDI · resumen publicado en el cuaderno de actas","url":""},{"year":2014,"title":"Is there genetic overlap between personality, expectancies and symptoms of cannabis use disorders?","venue":"Twin Research and Human Genetics, 17, 462–463 · Congreso ISTS, Budapest","url":"https://doi.org/10.1017/thg.2014.54"}],"funding":[{"code":"E-2013-06","title":"Estructura de la psicopatología y su relación con la personalidad: estudios transversales, prospectivos y de gemelos","amount":"6.000 €"}]},{"id":"murcia","city":"Murcia","country":"España","institution":"Universidad de Murcia · Registro de Gemelos","lat":37.9922,"lon":-1.1307,"duration":"2 meses","periods":["2014 · 2 meses · Heredabilidad de la personalidad, los motivos y el consumo de alcohol"],"hosts":["Juan R. Ordoñana"],"publications":[{"year":2018,"title":"Effects of social attitude change on heritability of smoking","venue":"Behavior Genetics","url":"http://dx.doi.org/10.1007/s10519-017-9871-1"}],"congresses":[{"year":2015,"title":"Social environment affects heritability of smoking persistence","venue":"Behavior Genetics Association 45th Annual Meeting Abstracts","url":"https://doi.org/10.1007/s10519-015-9742-6"},{"year":2015,"title":"Diferencias individuales en la heredabilidad del consumo de tabaco regular en función del contexto social","venue":"IV Jornadas AIIDI, Madrid","url":""}],"funding":[{"code":"E-2014-36","title":"Estudio sobre la heredabilidad de la personalidad, los motivos y el consumo de alcohol","amount":"2.300 €"}]}];
+const colors=['#0B3F5C','#19B94B','#EAB51D'];
+function drawStays(){
+ const trace={
+  type:'scattergeo',mode:'markers+text',
+  lat:STAYS.map(x=>x.lat),lon:STAYS.map(x=>x.lon),
+  text:STAYS.map(x=>x.city),textposition:'top center',
+  customdata:STAYS.map(x=>x.id),
+  marker:{size:STAYS.map(x=>11+2*(x.periods.length-1)),color:colors,line:{color:'#fff',width:2},opacity:.95},
+  hovertemplate:'<b>%{text}</b><br>Haz clic para consultar la estancia<extra></extra>'
+ };
+ const layout={margin:{l:0,r:0,t:4,b:0},paper_bgcolor:'#fbfdff',plot_bgcolor:'#fbfdff',
+  geo:{projection:{type:'natural earth'},showframe:false,showcoastlines:true,coastlinecolor:'#b8c2d1',
+       showland:true,landcolor:'#f3f5f8',showcountries:true,countrycolor:'#d5dce7',bgcolor:'#fbfdff'}};
+ Plotly.react('staysPlot',[trace],layout,{responsive:true,displayModeBar:false}).then(()=>{
+  const el=document.getElementById('staysPlot');
+  el.on('plotly_click',ev=>showStay(STAYS.find(x=>x.id===ev.points[0].customdata)));
+ });
+}
+function linkedItem(x){
+ const title=x.url
+   ? `<a class="stayWorkTitle" href="${x.url}" target="_blank" rel="noopener">${x.title}</a>`
+   : `<span class="stayWorkTitle">${x.title}</span>`;
+ return `<div class="item">${title}<div>${x.year} · ${x.venue}</div></div>`;
+}
+function showStay(s){
+ const pubs=s.publications||[],congs=s.congresses||[];
+ document.getElementById('staySide').innerHTML=
+ `<h2>${s.institution}</h2><div class="meta">${s.city}, ${s.country}</div><div class="stayline durationLine"><strong>Duración:</strong> ${s.duration}</div>
+ <div class="kpis"><div><span class="meta">periodos</span><strong>${s.periods.length}</strong></div>
+ <div><span class="meta">artículos</span><strong>${pubs.length}</strong></div>
+ <div><span class="meta">congresos</span><strong>${congs.length}</strong></div></div>
+ <h3>Estancia</h3>${s.periods.map(x=>`<div class="stayline">${x}</div>`).join('')}
+ <h3>Investigadores vinculados</h3><div class="hint">${s.hosts.join(' · ')}</div>
+ ${pubs.length?`<h3>Artículos relacionados</h3>${pubs.map(linkedItem).join('')}`:''}
+ ${congs.length?`<h3>Congresos y resúmenes publicados</h3>${congs.map(linkedItem).join('')}`:''}
+ <h3>Financiación</h3>
+ ${(s.funding||[]).map(f=>`<div class="funding"><div><strong>${f.code}</strong></div><div>${f.title}</div><div class="amount">${f.amount}</div></div>`).join('')}`;
+}
+document.querySelectorAll('.tab').forEach(btn=>btn.onclick=()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));
+ document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===btn.dataset.target));
+ if(btn.dataset.target==='staysView')setTimeout(()=>Plotly.Plots.resize('staysPlot'),30);
+});
+new ResizeObserver(()=>{if(document.getElementById('staysView').classList.contains('active'))Plotly.Plots.resize('staysPlot')}).observe(document.getElementById('staysView'));
+drawStays();
+</script></body></html>

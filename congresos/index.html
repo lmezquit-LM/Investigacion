@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Congresos · Métricas</title>
+<style>
+:root{
+  --blue:#0B3F5C;
+  --green:#19B94B;
+  --gold:#EAB51D;
+  --grey:#9FA09A;
+  --ink:#18313d;
+  --muted:#64777f;
+  --line:#dbe4e6;
+  --soft:#f5f8f9;
+}
+*{box-sizing:border-box}
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:#fff;
+  font-family:Inter,Montserrat,"Segoe UI",Arial,sans-serif;
+  color:var(--ink);
+}
+#viewport{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:#fff;
+}
+#stage{
+  position:absolute;
+  width:1920px;
+  height:1080px;
+  transform-origin:top left;
+  background:#fff;
+  padding:34px 42px 40px;
+  display:flex;
+  flex-direction:column;
+}
+.topbar{
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  flex:0 0 auto;
+}
+.summary{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+}
+.pill{
+  display:flex;
+  align-items:baseline;
+  gap:9px;
+  padding:10px 17px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  color:var(--muted);
+  font-size:18px;
+  white-space:nowrap;
+}
+.pill strong{
+  color:var(--green);
+  font-size:24px;
+  line-height:1;
+}
+.tabs{
+  display:flex;
+  gap:12px;
+  flex:0 0 auto;
+}
+.tabs a{
+  padding:11px 20px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  text-decoration:none;
+  color:var(--blue);
+  background:#fff;
+  font-size:17px;
+  font-weight:800;
+}
+.tabs a.active{
+  background:var(--blue);
+  border-color:var(--blue);
+  color:#fff;
+}
+.grid{
+  flex:1 1 auto;
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:22px;
+  padding-top:18px;
+}
+.card{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  border:1px solid var(--line);
+  border-radius:26px;
+  background:#fff;
+  box-shadow:0 12px 34px rgba(11,63,92,.08);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:320px minmax(0,1fr);
+  align-items:center;
+  padding:26px 34px;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:7px;
+  background:var(--accent);
+}
+.visual{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+}
+.donut{
+  position:relative;
+  width:240px;
+  height:240px;
+  flex:0 0 auto;
+}
+.donut svg{
+  width:100%;
+  height:100%;
+  display:block;
+  transform:rotate(-90deg);
+}
+.donut circle{
+  vector-effect:non-scaling-stroke;
+}
+.center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  pointer-events:none;
+}
+.center strong{
+  font-size:44px;
+  line-height:1;
+  color:var(--blue);
+  letter-spacing:-.03em;
+}
+.center span{
+  margin-top:9px;
+  font-size:16px;
+  color:var(--muted);
+}
+.legend{
+  width:100%;
+  max-width:285px;
+  display:grid;
+  gap:10px;
+  margin-top:16px;
+}
+.legend-row{
+  display:grid;
+  grid-template-columns:13px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  font-size:17px;
+  line-height:1.15;
+}
+.legend-row i{
+  width:13px;
+  height:13px;
+  border-radius:50%;
+}
+.legend-row strong{
+  color:var(--blue);
+  font-size:18px;
+}
+.copy{
+  align-self:stretch;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+  padding-left:18px;
+}
+.copy h2{
+  margin:0;
+  color:var(--blue);
+  font-size:31px;
+  line-height:1.08;
+  letter-spacing:-.025em;
+}
+.copy p{
+  margin:17px 0 0;
+  max-width:520px;
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.45;
+}
+.kicker{
+  display:inline-flex;
+  align-self:flex-start;
+  margin-bottom:14px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:var(--soft);
+  color:var(--accent);
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+@media (max-width:700px){
+  #stage{padding:24px}
+}
+</style>
+
+<style id="donuts-exact-percentages">
+.donut{
+  border-radius:50%!important;
+  background:var(--donut-bg, conic-gradient(#0B3F5C 0 100%))!important;
+}
+.donut::after{
+  content:""!important;
+  position:absolute!important;
+  inset:23px!important;
+  border-radius:50%!important;
+  background:#fff!important;
+  z-index:1!important;
+}
+.donut svg{
+  display:none!important;
+}
+.donut .center{
+  z-index:2!important;
+}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <main id="stage">
+    <header class="topbar">
+      <div class="summary" aria-label="Resumen">
+        <div class="pill"><strong>249</strong><span>contribuciones</span></div>
+        <div class="pill"><strong>14</strong><span>trabajos premiados</span></div>
+        <div class="pill"><strong>45</strong><span>localizaciones</span></div>
+      </div>
+      <nav class="tabs" aria-label="Secciones de congresos">
+        <a class="active" href="./">Métricas</a>
+        <a href="./mapa.html">Presencia científica →</a>
+      </nav>
+    </header>
+
+    <section class="grid">
+      <article class="card" style="--accent:#19B94B">
+        <div class="visual">
+          <div class="donut" style="--donut-bg:conic-gradient(#0B3F5C 0.0000% 72.2892%, #EAB51D 72.2892% 93.9759%, #19B94B 93.9759% 98.3936%, #9FA09A 98.3936% 100.0000%)">
+            <svg viewbox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#edf2f3" stroke-width="23"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#0B3F5C" stroke-width="23" stroke-dasharray="399.701 153.219" stroke-dashoffset="0.000"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#EAB51D" stroke-width="23" stroke-dasharray="119.910 433.010" stroke-dashoffset="-399.701"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#19B94B" stroke-width="23" stroke-dasharray="24.426 528.494" stroke-dashoffset="-519.612"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#9FA09A" stroke-width="23" stroke-dasharray="8.882 544.038" stroke-dashoffset="-544.038"></circle>
+            </svg>
+            <div class="center"><strong>249</strong><span>contribuciones</span></div>
+          </div>
+          <div class="legend">
+            <div class="legend-row"><i style="background:#0B3F5C"></i><span>Pósteres</span><strong>180</strong></div>
+            <div class="legend-row"><i style="background:#EAB51D"></i><span>Comunicaciones orales</span><strong>54</strong></div>
+            <div class="legend-row"><i style="background:#19B94B"></i><span>Simposios</span><strong>11</strong></div>
+            <div class="legend-row"><i style="background:#9FA09A"></i><span>Virtuales</span><strong>4</strong></div>
+          </div>
+        </div>
+        <div class="copy">
+          <span class="kicker">Formato</span>
+          <h2>Formato de contribución</h2>
+          <p>Predominan los pósteres, junto con una presencia sostenida en comunicaciones orales y simposios.</p>
+        </div>
+      </article>
+
+      <article class="card" style="--accent:#0B3F5C">
+        <div class="visual">
+          <div class="donut" style="--donut-bg:conic-gradient(#19B94B 0 42.1687%, #e8eef0 42.1687% 100%)">
+            <svg viewbox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#edf2f3" stroke-width="23"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#19B94B" stroke-width="23" stroke-dasharray="233.159 319.761" stroke-dashoffset="0.000"></circle>
+            </svg>
+            <div class="center"><strong>42%</strong><span>105 de 249</span></div>
+          </div>
+          <div class="legend">
+            <div class="legend-row"><i style="background:#19B94B"></i><span>Primera o última autora</span><strong>105</strong></div>
+            <div class="legend-row"><i style="background:#dfe6e8"></i><span>Coautoría</span><strong>144</strong></div>
+          </div>
+        </div>
+        <div class="copy">
+          <span class="kicker">Autoría</span>
+          <h2>Liderazgo científico</h2>
+          <p>Más de cuatro de cada diez contribuciones reflejan una posición de liderazgo en la autoría.</p>
+        </div>
+      </article>
+
+      <article class="card" style="--accent:#EAB51D">
+        <div class="visual">
+          <div class="donut" style="--donut-bg:conic-gradient(#EAB51D 0 38.1526%, #e8eef0 38.1526% 100%)">
+            <svg viewbox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#edf2f3" stroke-width="23"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#EAB51D" stroke-width="23" stroke-dasharray="210.954 341.967" stroke-dashoffset="0.000"></circle>
+            </svg>
+            <div class="center"><strong>38%</strong><span>95 de 249</span></div>
+          </div>
+          <div class="legend">
+            <div class="legend-row"><i style="background:#EAB51D"></i><span>Publicados en actas</span><strong>95</strong></div>
+            <div class="legend-row"><i style="background:#dfe6e8"></i><span>No publicados</span><strong>154</strong></div>
+          </div>
+        </div>
+        <div class="copy">
+          <span class="kicker">Difusión</span>
+          <h2>Publicados en actas</h2>
+          <p>Una parte relevante de las contribuciones cuenta además con publicación formal en las actas del congreso.</p>
+        </div>
+      </article>
+
+      <article class="card" style="--accent:#9FA09A">
+        <div class="visual">
+          <div class="donut" style="--donut-bg:conic-gradient(#0B3F5C 0 71.0843%, #e8eef0 71.0843% 100%)">
+            <svg viewbox="0 0 240 240" aria-hidden="true">
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#edf2f3" stroke-width="23"></circle>
+              <circle cx="120" cy="120" r="88" fill="none" stroke="#0B3F5C" stroke-width="23" stroke-dasharray="393.040 159.881" stroke-dashoffset="0.000"></circle>
+            </svg>
+            <div class="center"><strong>71%</strong><span>177 de 249</span></div>
+          </div>
+          <div class="legend">
+            <div class="legend-row"><i style="background:#0B3F5C"></i><span>Internacionales</span><strong>177</strong></div>
+            <div class="legend-row"><i style="background:#dfe6e8"></i><span>Nacionales</span><strong>72</strong></div>
+          </div>
+        </div>
+        <div class="copy">
+          <span class="kicker">Alcance</span>
+          <h2>Internacionalización</h2>
+          <p>Más de siete de cada diez contribuciones se han presentado en encuentros científicos de ámbito internacional.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  const BASE_W = 1920;
+  const BASE_H = 1080;
+  const stage = document.getElementById('stage');
+
+  function fitStage(){
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const scale = Math.min(vw / BASE_W, vh / BASE_H);
+    const x = Math.max(0, (vw - BASE_W * scale) / 2);
+    const y = Math.max(0, (vh - BASE_H * scale) / 2);
+    stage.style.transform = `translate(${x}px,${y}px) scale(${scale})`;
+  }
+
+  window.addEventListener('resize', fitStage, {passive:true});
+  window.addEventListener('orientationchange', fitStage, {passive:true});
+  fitStage();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="format-detection" content="telephone=no,date=no,address=no,email=no"><title>Servicio científico y formación</title>
+<style>
+:root{--blue:#0B3F5C;--green:#19B94B;--gold:#EAB51D;--ink:#18313d;--muted:#64777f;--line:#dbe4e6;--soft:#f4f7f7}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff;font-family:Montserrat,'Avenir Next','Segoe UI',Arial,sans-serif;color:var(--ink)}
+.page{height:100vh;min-height:500px;padding:18px 14px 14px;display:flex;flex-direction:column;background:#fff}
+.card{border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 9px 26px rgba(11,63,92,.07)}
+.pill{border:1px solid var(--line);border-radius:999px;background:#fff;padding:7px 11px;font-size:11px;font-weight:800;color:var(--blue);cursor:pointer}
+.drawer{position:fixed;top:14px;right:14px;width:min(450px,44vw);height:calc(100vh - 28px);background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 38px rgba(11,63,92,.16);padding:18px 20px;transform:translateX(110%);transition:.25s ease;z-index:20;overflow:auto}
+.drawer.open{transform:translateX(0)}.drawerClose{position:sticky;top:0;float:right;border:1px solid var(--line);background:#fff;border-radius:999px;width:30px;height:30px;padding:0;cursor:pointer;color:var(--blue);font-weight:800}
+.drawer h2{font-size:20px;color:var(--blue);margin:8px 0 6px}.drawer .meta{font-size:11px;color:var(--muted)}.drawer .entry{padding:11px 0;border-top:1px solid var(--line)}.drawer .entry b{font-size:12px}.drawer .entry div{font-size:11px;color:var(--muted);line-height:1.45;margin-top:3px}
+
+.grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:12px}
+.metricCard{padding:18px 20px;min-height:0;overflow:hidden;position:relative}.metricCard:before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:var(--blue)}.metricCard.green:before{background:var(--green)}.metricCard.gold:before{background:var(--gold)}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.head h2{font-size:18px;color:var(--blue);margin:0 0 3px}.sub{font-size:11px;color:var(--muted)}.kpi strong{display:block;font-size:34px;line-height:1;color:var(--green)}.kpi span{font-size:11px;color:var(--muted);font-weight:700}
+.doubleKpi{display:flex;gap:24px;align-items:flex-end;margin:15px 0 12px}.barList{display:grid;gap:7px}.barRow{display:grid;grid-template-columns:minmax(110px,1.6fr) minmax(90px,1fr) 24px;gap:8px;align-items:center;font-size:10px;color:var(--muted)}.track{height:7px;background:#eef2f3;border-radius:999px;overflow:hidden}.track i{display:block;height:100%;background:var(--blue);border-radius:999px}.barRow b{font-size:11px;color:var(--blue);text-align:right}
+.editorialTimeline{display:grid;gap:9px;margin-top:14px}.editorRow{border-left:4px solid var(--green);padding:8px 10px;background:#f8faf9;border-radius:8px}.editorRow>div{display:flex;justify-content:space-between;gap:8px}.editorRow strong{font-size:12px;color:var(--blue);text-decoration:none!important;border-bottom:none!important}.editorRow span{font-size:9px;color:var(--green);font-weight:800}.editorRow b{display:block;font-size:11px;margin-top:3px}.editorRow p{font-size:10px;color:var(--muted);margin:3px 0 0}
+.tribVisual{display:flex;align-items:center;gap:22px;height:calc(100% - 46px);padding-top:10px}.ring{position:relative;width:138px;height:138px;flex:0 0 auto;border-radius:50%;background:conic-gradient(var(--green) 0 71.43%,#e8eef0 71.43% 100%)}.ring:after{content:"";position:absolute;inset:20px;background:#fff;border-radius:50%}.ringText{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center}.ringText strong{font-size:32px;color:var(--blue)}.ringText span{font-size:10px;color:var(--muted);text-align:center;max-width:68px}.roles{display:grid;gap:8px;font-size:11px;color:var(--muted)}.roles b{color:var(--blue);font-size:13px}
+.tfmWrap{height:calc(100% - 44px);display:grid;place-items:center;text-align:center}.tfmBig{font-size:72px;line-height:.9;color:var(--green);font-weight:900}.tfmLabel{font-size:16px;color:var(--blue);font-weight:800;margin-top:8px}
+</style>
+<style id="editorial-periods-final">
+.editorRow .editorPeriod{
+  display:inline-block!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  color:#0B3F5C!important;
+  font-weight:800!important;
+  text-decoration:none!important;
+  text-decoration-line:none!important;
+  border:0!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+  background:none!important;
+}
+.editorRow .editorPeriod::before,
+.editorRow .editorPeriod::after{
+  content:none!important;
+  display:none!important;
+}
+</style>
+<style id="tfm-editorial-final-format">
+.tfmYear{color:#19B94B!important;font-weight:800!important;text-decoration:none!important}
+.tfmTitle{color:#172033!important;font-weight:800!important}
+.editorRow .editorPeriod,.editorRow .editorPeriod:hover,.editorRow .editorPeriod:focus,.editorRow .editorPeriod:active{
+color:#0B3F5C!important;font-weight:800!important;text-decoration:none!important;text-decoration-line:none!important;
+text-decoration-color:transparent!important;border-bottom:0!important;box-shadow:none!important;background-image:none!important}
+</style>
+<style id="tfm-and-editorial-definitive">
+/* Años TFM: verde, SIN subrayado; títulos: negrita. */
+.drawer .tfmEntry .tfmYear{
+  color:#19B94B!important;
+  font-size:12px!important;
+  line-height:1.3!important;
+  font-weight:800!important;
+  text-decoration:none!important;
+  border:0!important;
+  margin-bottom:5px!important;
+}
+.drawer .tfmEntry .tfmTitle{
+  color:#18313d!important;
+  font-size:11px!important;
+  line-height:1.45!important;
+  font-weight:800!important;
+  margin-top:0!important;
+}
+.drawer .tfmEntry .tfmMaster{
+  color:#64777f!important;
+  font-size:11px!important;
+  line-height:1.45!important;
+  font-weight:400!important;
+  margin-top:4px!important;
+}
+/* Periodos editoriales: texto plano, nunca enlace/subrayado. */
+.editorialTimeline .editorPeriod{
+  color:#0B3F5C!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  text-decoration:none!important;
+  text-decoration-line:none!important;
+  border:0!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+}
+</style>
+
+<style id="editor-period-plain-text-final">
+.editorPeriod{
+  display:inline!important;
+  color:#0B3F5C!important;
+  font-family:inherit!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  text-decoration:none!important;
+  text-decoration-line:none!important;
+  text-decoration-thickness:0!important;
+  text-underline-offset:0!important;
+  border:0!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+  background:none!important;
+  cursor:default!important;
+}
+.editorPeriod::before,.editorPeriod::after{content:none!important}
+</style>
+</head><body><main class="page"><section class="grid">
+<article class="card metricCard"><div class="head"><div><h2>Revisión científica</h2><div class="sub">Actividad como revisora externa</div></div><button class="pill" onclick="openReviews()">ver detalle</button></div><div class="doubleKpi"><div class="kpi"><strong>30</strong><span>revisiones registradas</span></div><div class="kpi"><strong>15</strong><span>revistas distintas</span></div></div><div class="barList"><div class="barRow"><span>Frontiers in Psychology</span><div class="track"><i style="width:100.0%"></i></div><b>8</b></div><div class="barRow"><span>Spanish Journal of Psychology</span><div class="track"><i style="width:50.0%"></i></div><b>4</b></div><div class="barRow"><span>The American Journal of Drug and Alcohol Abuse</span><div class="track"><i style="width:37.5%"></i></div><b>3</b></div><div class="barRow"><span>Journal of Psychology and AI</span><div class="track"><i style="width:25.0%"></i></div><b>2</b></div><div class="barRow"><span>PLOS One</span><div class="track"><i style="width:25.0%"></i></div><b>2</b></div><div class="barRow"><span>Substance Use and Misuse</span><div class="track"><i style="width:25.0%"></i></div><b>2</b></div></div></article>
+<article class="card metricCard green"><div class="head"><div><h2>Equipos editoriales</h2><div class="sub">Responsabilidad editorial continuada</div></div><div class="kpi"><strong>2</strong><span>roles</span></div></div><div class="editorialTimeline"><div class="editorRow"><div><span class="editorPeriod">2015–2021</span><span>Finalizada</span></div><b>Review Editor</b><p>Frontiers in Personality and Social Psychology</p></div><div class="editorRow"><div><span class="editorPeriod">2020–actualidad</span><span>En curso</span></div><b>Associate Editor</b><p>The Spanish Journal of Psychology</p></div></div></article>
+<article class="card metricCard gold"><div class="head"><div><h2>Tribunales de tesis</h2><div class="sub">Evaluación de tesis doctorales</div></div><button class="pill" onclick="openTribunals()">ver detalle</button></div><div class="tribVisual"><div class="ring"><div class="ringText"><strong>7</strong><span>tribunales</span></div></div><div class="roles"><div><b>5</b> tesis internacionales</div><div><b>2</b> Presidenta</div><div><b>2</b> Secretaria</div><div><b>3</b> Vocal</div></div></div></article>
+<article class="card metricCard green"><div class="head"><div><h2>Formación de investigadores</h2><div class="sub">Dirección de Trabajos Fin de Máster</div></div><button class="pill" onclick="openTFM()">ver detalle</button></div><div class="tfmWrap"><div><div class="tfmBig">22</div><div class="tfmLabel">TFM dirigidos</div></div></div></article>
+</section></main>
+<aside id="drawer" class="drawer"><button class="drawerClose" onclick="closeDrawer()">✕</button><div id="drawerContent"></div></aside>
+<script>
+const JOURNALS=[{"journal": "Frontiers in Psychology", "n": 8}, {"journal": "Spanish Journal of Psychology", "n": 4}, {"journal": "The American Journal of Drug and Alcohol Abuse", "n": 3}, {"journal": "Journal of Psychology and AI", "n": 2}, {"journal": "PLOS One", "n": 2}, {"journal": "Substance Use and Misuse", "n": 2}, {"journal": "Addiction", "n": 1}, {"journal": "Addictive Behaviors", "n": 1}, {"journal": "Adicciones", "n": 1}, {"journal": "Alcohol and Alcoholism", "n": 1}, {"journal": "Current Psychology", "n": 1}, {"journal": "International Journal of Mental Health and Addiction", "n": 1}, {"journal": "Journal of Studies on Alcohol and Drugs", "n": 1}, {"journal": "Psicothema", "n": 1}, {"journal": "Psychiatry Research", "n": 1}];
+const TRIBUNALS=[{"year": 2018, "role": "Vocal", "university": "Universitat de Barcelona", "title": "Drinving under the influence of alcohol: the role of personality and the Theory of Planned Behaviour", "international": "Sí"}, {"year": 2019, "role": "Presidenta", "university": "Universidad de Murcia", "title": "Genetic and environmental factors involved in sleep quality", "international": "Sí"}, {"year": 2020, "role": "Vocal", "university": "Universidad de Santiago de Compostela", "title": "Uso problemático de internet y conductas de riesgo asociadas: predictores de personalidad y consecuencias psicosociales desde un enfoque longitudinal", "international": "No"}, {"year": 2022, "role": "Presidenta", "university": "Universidad de Santiago de Compostela", "title": "The heterogenity of disruptive behavior in the preschool years: Levels of organization and underlaying mechanism", "international": "Sí"}, {"year": 2023, "role": "Secretaria", "university": "Universidad de Huelva", "title": "Estrategias conductuales de protección ante el consumo de alcohol y sus consecuencias negativas en adultos jóvenes: Un estudio prospectivo sobre sus determinantes psicosociales", "international": "Sí"}, {"year": 2026, "role": "Secretaria", "university": "Universitat Jaume I", "title": "Functional assessment in autism spectrum disorder: Development and validation of a battery for activity and participation based on the ICF", "international": "Sí"}, {"year": 2026, "role": "Vocal", "university": "Universidad Autónoma de Madrid", "title": "Evaluación conductual de la tolerancia a la frustración y a la incertidumbre como factores de vulnerabilidad psicológica en adolescentes", "international": "No"}];
+const TFMS=[{"course": "2013-2014", "title": "Las habilidades sociales en niños con Síndrome de Asperger", "master": "Máster Universitario en Prevención e Intervención Psicológica en Problemas de Conducta en la Escuela (Valencian International University)"}, {"course": "2013-2014", "title": "Evolución del diagnóstico y los tratamientos de los trastornos del espectro autista", "master": "Máster Universitario en Prevención e Intervención Psicológica en Problemas de Conducta en la Escuela (Valencian International University)"}, {"course": "2014-2015", "title": "Intervención en un caso N=1 de TEA", "master": "Máster Universitario en Prevención e Intervención Psicológica en Problemas de Conducta en la Escuela (Valencian International University)"}, {"course": "2014-2015", "title": "Intervención en habilidades sociales en niños de preescolar", "master": "Máster Universitario en Prevención e Intervención Psicológica en Problemas de Conducta en la Escuela (Valencian International University)"}, {"course": "2014-2015", "title": "Estudio N=1 de un niño con TEA", "master": "Máster Universitario en Prevención e Intervención Psicológica en Problemas de Conducta en la Escuela (Valencian International University)"}, {"course": "2015-2016", "title": "Relación entre la personalidad, el apoyo social percibido y la sintomatología internalizante y externalizante", "master": "Máster Universitario en Psicología General Sanitaria (Universitat Jaume I)"}, {"course": "2017-2018", "title": "Estudio sobre la influencia de la personalidad y los eventos vitales negativos en el desarrollo de psicopatología internalizante y externalizante en adolescentes", "master": "Máster Universitario en Psicología General Sanitaria (Universitat Jaume I)"}, {"course": "2018-2019", "title": "Relación de la práctica del deporte, expectativas y normas subjetivas con la frecuencia de juegos de azar en jóvenes", "master": "Máster en Psicología del Deporte (COP Valencia)"}, {"course": "2018-2019", "title": "Estudio sobre viabilidad y eficacia del protocolo unificado para el tratamiento transdiagnóstico de los trastornos emocionales en un contexto de salud mental público", "master": "Máster Universitario en Psicología General Sanitaria (Universitat Jaume I)"}, {"course": "2023-2024", "title": "Revisión sistemática sobre la relación entre las altas capacidades y ser víctima de acoso escolar", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2023-2024", "title": "Consecuencias del maltrato infantil en España: Una revisión sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2023-2024", "title": "Revisión sistemática sobre el efecto de las redes sociales en las conductas problemáticas de los adolescentes", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2023-2024", "title": "Comparando la TCC y la EMDR en el tratamiento del TEP en población expuesta a maltrato físico y/o abuso sexual durante la infancia: una revisión sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2023-2024", "title": "Percepción del riesgo de sufrir violencia de género a través de las redes sociales y las estrategias de afrontamiento de las adolescentes: Revisión Sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2023-2024", "title": "Revisión sistemática sobre los factores biopsicosociales que influyen en el desarrollo de conductas de cyberbullying", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2023-2024", "title": "Consecuencias psicológicas del sharenting en población infantojuvenil: Una revisión sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2024-2025", "title": "Consecuencias de la violencia de género en los hijos: Una revisión sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2024-2025", "title": "Programas de prevención del acoso escolar: Una revisión sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2025-2026", "title": "Asociación entre la personalidad y el ciberacoso en población adolescente: Un estudio de revisión", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2025-2026", "title": "Relación entre los diferentes tipos de maltrato infantil y los roles de víctima y agresor en el acoso escolar y ciberacoso: Una revisión sistemática", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2025-2026", "title": "Impacto psicológico del acoso escolar en adolescentes con TEA", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}, {"course": "2025-2026", "title": "Impacto psicológico y alteraciones del neurodesarrollo en niños y adolescentes expuestos a violencia de género: Una revisión sistemática.", "master": "Máster Universitario en Psicología Infantil y Juvenil (Universitat Oberta de Catalunya)"}];
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+function openReviews(){document.getElementById('drawerContent').innerHTML='<h2>Revisión científica</h2><div class="meta">Revisiones registradas por revista.</div>'+JOURNALS.map(x=>`<div class="entry"><b>${x.journal}</b><div>${x.n} revisión${x.n===1?'':'es'}</div></div>`).join('');document.getElementById('drawer').classList.add('open')}
+function openTribunals(){document.getElementById('drawerContent').innerHTML='<h2>Tribunales de tesis</h2>'+TRIBUNALS.map(x=>`<div class="entry"><b>${x.year} · ${x.role} · ${x.university}</b><div>${x.title}</div><div>${x.international==='Sí'?'Tesis internacional':'No internacional'}</div></div>`).join('');document.getElementById('drawer').classList.add('open')}
+function openTFM(){
+ document.getElementById('drawerContent').innerHTML=
+   '<h2>TFM dirigidos</h2><div class="meta">Curso, título y Máster.</div>'+
+   TFMS.map(x=>`<div class="entry tfmEntry"><div class="tfmYear">${x.course}</div><div class="tfmTitle">${x.title}</div><div class="tfmMaster">${x.master}</div></div>`).join('');
+ document.getElementById('drawer').classList.add('open')
+}
+</script>
+<script id="click-outside-close-service">
+document.addEventListener('click', function(ev){
+  const drawer=document.getElementById('drawer');
+  if(!drawer || !drawer.classList.contains('open')) return;
+  if(drawer.contains(ev.target)) return;
+  if(ev.target.closest('.pill')) return;
+  if(typeof closeDrawer==='function') closeDrawer();
+  else drawer.classList.remove('open');
+});
+</script>
+
+</body></html>

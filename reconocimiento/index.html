@@ -1,0 +1,191 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Reconocimiento</title>
+<style>
+:root{--blue:#0B3F5C;--green:#19B94B;--gold:#EAB51D;--ink:#18313d;--muted:#64777f;--line:#dbe4e6;--soft:#f4f7f7}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff;font-family:Montserrat,'Avenir Next','Segoe UI',Arial,sans-serif;color:var(--ink)}
+.page{height:100vh;min-height:500px;padding:18px 14px 14px;display:flex;flex-direction:column;background:#fff}
+.card{border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 9px 26px rgba(11,63,92,.07)}
+.pill{border:1px solid var(--line);border-radius:999px;background:#fff;padding:7px 11px;font-size:11px;font-weight:800;color:var(--blue);cursor:pointer}
+.drawer{position:fixed;top:14px;right:14px;width:min(450px,44vw);height:calc(100vh - 28px);background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 38px rgba(11,63,92,.16);padding:18px 20px;transform:translateX(110%);transition:.25s ease;z-index:20;overflow:auto}
+.drawer.open{transform:translateX(0)}.drawerClose{position:sticky;top:0;float:right;border:1px solid var(--line);background:#fff;border-radius:999px;width:30px;height:30px;padding:0;cursor:pointer;color:var(--blue);font-weight:800}
+.drawer h2{font-size:20px;color:var(--blue);margin:8px 0 6px}.drawer .meta{font-size:11px;color:var(--muted)}.drawer .entry{padding:11px 0;border-top:1px solid var(--line)}.drawer .entry b{font-size:12px}.drawer .entry div{font-size:11px;color:var(--muted);line-height:1.45;margin-top:3px}
+
+.recGrid{flex:1;min-height:0;display:grid;grid-template-rows:46% 1fr;gap:12px}.section{padding:16px 20px;position:relative;overflow:hidden}.secHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.secHead h2{font-size:18px;color:var(--blue);margin:0}.secHead p{font-size:10px;color:var(--muted);margin:3px 0 0}.count{display:flex;align-items:baseline;gap:7px}.count strong{font-size:30px;color:var(--green)}.count span{font-size:11px;color:var(--muted);font-weight:700}
+.schTimeline{position:relative;height:calc(100% - 50px);margin-top:6px}.schTimeline:before{content:"";position:absolute;left:6%;right:6%;top:50%;height:2px;background:#dbe4e6}
+.schNode{position:absolute;top:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;width:170px;height:88px;color:var(--blue);text-decoration:none!important}.schNode *{text-decoration:none!important;border-bottom:none!important}.schNode i{position:absolute;left:50%;top:42px;width:12px;height:12px;border-radius:50%;background:var(--blue);transform:translate(-50%,-50%);box-shadow:0 0 0 5px #fff}.schNode span{position:absolute;left:50%;top:0;transform:translateX(-50%);font-size:10px;font-weight:900;color:var(--green);white-space:nowrap}.schNode b{position:absolute;left:50%;top:54px;transform:translateX(-50%);width:160px;font-size:9px;line-height:1.2;color:var(--muted)}
+.awardStage{position:relative;height:calc(100% - 54px);margin-top:6px}.awardStage:before{content:"";position:absolute;left:4%;right:4%;top:44px;height:2px;background:#dbe4e6}.awardNode{position:absolute;transform:translateX(-50%);border:0;background:transparent;width:44px;height:52px;cursor:pointer}.awardNode i{position:absolute;left:50%;top:17px;width:11px;height:11px;border-radius:50%;background:var(--blue);transform:translate(-50%,-50%);box-shadow:0 0 0 4px #fff}.awardNode span{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:9px;color:var(--muted);font-weight:800}.awardNode.highlight i{background:var(--green);box-shadow:0 0 0 4px #fff,0 0 0 7px rgba(25,185,75,.22)}.awardPhoto{width:100%;max-height:285px;object-fit:contain;background:#f4f7f7;border-radius:12px;margin:10px 0 14px}
+</style>
+<style id="scholarship-detail-year-final">
+.drawer .scholarshipYear{
+  display:block!important;
+  color:#19B94B!important;
+  font-family:inherit!important;
+  font-size:20px!important;
+  line-height:1.1!important;
+  font-weight:850!important;
+  text-decoration:none!important;
+  text-decoration-line:none!important;
+  text-decoration-thickness:0!important;
+  border:0!important;
+  border-bottom:0!important;
+  box-shadow:none!important;
+  background:none!important;
+  margin:5px 0 14px!important;
+}
+</style>
+
+
+<style id="recognition-awards-clean-timeline">
+.awardStage{position:relative;height:calc(100% - 54px);margin-top:6px}
+.awardStage:before{
+  content:"";position:absolute;left:4%;right:4%;top:40px;height:2px;background:#dbe4e6;z-index:1
+}
+.awardYearLayer{position:absolute;left:0;right:0;top:0;height:28px;z-index:5;pointer-events:none}
+.awardYear{
+  position:absolute;top:0;transform:translateX(-50%);
+  font-size:12px;font-weight:850;color:var(--blue);
+  white-space:nowrap;background:#fff;padding:0 3px;border-radius:4px
+}
+.awardNode{
+  position:absolute;transform:translateX(-50%);border:0;background:transparent;
+  width:36px;height:25px;cursor:pointer;z-index:3
+}
+.awardNode i{
+  position:absolute;left:50%;top:7px;width:11px;height:11px;border-radius:50%;
+  background:var(--blue);transform:translate(-50%,-50%);box-shadow:0 0 0 4px #fff
+}
+.awardNode.highlight i{
+  background:var(--green);box-shadow:0 0 0 4px #fff,0 0 0 7px rgba(25,185,75,.22)
+}
+</style>
+
+<style id="scholarship-continuity-proposal">
+.schTimeline{display:none!important}
+.schContinuity{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+.schAxis{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:end;height:23px}
+.axisYears{position:relative;height:20px;border-bottom:1px solid #dbe4e6}
+.axisYears span{position:absolute;bottom:5px;transform:translateX(-50%);font-size:9px;font-weight:800;color:var(--blue)}
+.axisYears span:first-child{transform:none}.axisYears span:last-child{transform:translateX(-100%)}
+.schRow{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:center;border:0;background:transparent;padding:0;cursor:pointer;text-align:left}
+.schLabel{padding:5px 9px;border-radius:10px;background:#f8fafb;border:1px solid #e5ecee}
+.schLabel b{display:block;font-size:10px;color:var(--blue);line-height:1.15}
+.schLabel span{display:block;margin-top:2px;font-size:7.5px;color:var(--muted)}
+.schTrack{height:26px;position:relative;background:
+  repeating-linear-gradient(to right,transparent 0,transparent calc(14.285% - 1px),#edf2f3 calc(14.285% - 1px),#edf2f3 14.285%);
+  border-bottom:1px solid #edf2f3}
+.schBar{position:absolute;top:7px;height:12px;border-radius:7px;background:var(--blue);box-shadow:0 2px 5px rgba(11,63,92,.12)}
+.schBar.fpi{background:var(--green)}
+.schBar.continuity{background:var(--blue)}
+.schBar.project{min-width:10px;background:var(--gold)}
+.schRow:hover .schLabel{box-shadow:0 4px 12px rgba(11,63,92,.08)}
+.careerMilestone{position:absolute;right:0;top:18px;font-size:7.5px;font-weight:850;color:var(--green);white-space:nowrap;transform:translateY(2px)}
+.continuityCaption{margin-left:316px;font-size:7px;color:#87979d;margin-top:2px}
+</style>
+
+<style id="genially-compact-recognition">
+.recGrid{grid-template-rows:50% 1fr!important;gap:10px!important}
+.recGrid>.section:nth-child(2){min-height:0!important}
+.recGrid>.section:nth-child(2) .secHead{padding-bottom:4px!important}
+.recGrid>.section:nth-child(2) .awardStage{
+  height:185px!important;
+  min-height:185px!important;
+  margin-top:2px!important;
+  overflow:hidden!important
+}
+.careerMilestone{display:none!important}
+.continuityCaption{margin-top:1px!important}
+</style>
+
+<style id="final-spacing-scholarships-awards">
+.recGrid{grid-template-rows:52% 1fr!important;gap:8px!important}
+.section{padding:14px 18px!important}
+.secHead h2{font-size:20px!important;margin-bottom:5px!important}
+.secHead p{font-size:11px!important;line-height:1.3!important;margin-top:0!important}
+.count strong{font-size:32px!important}
+.count span{font-size:12px!important}
+
+/* More separation before the scholarship timeline */
+.recGrid>.section:first-child .secHead{margin-bottom:12px!important}
+.schContinuity{margin-top:12px!important;gap:8px!important}
+.schAxis{grid-template-columns:350px 1fr!important;gap:18px!important;height:28px!important}
+.axisYears{height:24px!important}
+.axisYears span{bottom:5px!important;font-size:12px!important;font-weight:850!important;color:var(--blue)!important}
+.schRow{grid-template-columns:350px 1fr!important;gap:18px!important}
+.schLabel{padding:7px 11px!important;border-radius:11px!important}
+.schLabel b{font-size:12px!important;line-height:1.18!important}
+.schLabel span{font-size:9px!important;margin-top:3px!important}
+.schTrack{height:32px!important}
+.schBar{top:9px!important;height:14px!important;border-radius:8px!important}
+.continuityCaption{margin-left:368px!important;font-size:8.5px!important;margin-top:1px!important}
+
+/* More separation between Awards subtitle and its timeline */
+.recGrid>.section:nth-child(2){padding-top:12px!important;padding-bottom:8px!important}
+.recGrid>.section:nth-child(2) .secHead{margin-bottom:14px!important}
+.recGrid>.section:nth-child(2) .awardStage{
+  height:158px!important;min-height:158px!important;
+  margin-top:8px!important;overflow:hidden!important
+}
+.awardYear{font-size:13px!important;font-weight:850!important}
+</style>
+
+<style id="final-extra-lower-timelines">
+.recGrid>.section:first-child .secHead{margin-bottom:17px!important}
+.schContinuity{margin-top:16px!important}
+.recGrid>.section:nth-child(2) .secHead{margin-bottom:19px!important}
+.recGrid>.section:nth-child(2) .awardStage{margin-top:12px!important;height:150px!important;min-height:150px!important}
+</style>
+</head><body><main class="page"><section class="recGrid">
+<article class="card section"><div class="secHead"><div><h2>Becas de investigación</h2><p>Financiación personal en las primeras etapas de la carrera investigadora</p></div><div class="count"><strong>4</strong><span>becas</span></div></div><div class="schContinuity">
+  <div class="schAxis">
+    <div class="axisSpacer"></div>
+    <div class="axisYears">
+      <span style="left:0%">2005</span><span style="left:14.3%">2006</span><span style="left:28.6%">2007</span>
+      <span style="left:42.9%">2008</span><span style="left:57.1%">2009</span><span style="left:71.4%">2010</span>
+      <span style="left:85.7%">2011</span><span style="left:100%">2012</span>
+    </div>
+  </div>
+
+  <button class="schRow" onclick="showScholarship(0)">
+    <div class="schLabel"><b>Beca de colaboración de segundo ciclo</b><span>2005–2006</span></div>
+    <div class="schTrack"><i class="schBar collaboration" style="left:0%;width:13.1%"></i></div>
+  </button>
+
+  <button class="schRow" onclick="showScholarship(1)">
+    <div class="schLabel"><b>Beca FPI – UJI</b><span>2007–2011</span></div>
+    <div class="schTrack"><i class="schBar fpi" style="left:23.8%;width:57.1%"></i></div>
+  </button>
+
+  <button class="schRow" onclick="showScholarship(2)">
+    <div class="schLabel"><b>Beca de continuidad de la actividad investigadora</b><span>2011–2012</span></div>
+    <div class="schTrack"><i class="schBar continuity" style="left:82.1%;width:15.5%"></i></div>
+  </button>
+
+  <button class="schRow" onclick="showScholarship(3)">
+    <div class="schLabel"><b>Beca a cargo de proyecto de investigación</b><span>2012</span></div>
+    <div class="schTrack"><i class="schBar project" style="left:97.6%;width:2.4%"></i></div>
+  </button>
+
+  <div class="continuityCaption">Continuidad de la financiación y formación investigadora</div>
+</div></article>
+<article class="card section"><div class="secHead"><div><h2>Premios y reconocimientos</h2><p>Se excluyen las entradas de grupos de investigación de alto rendimiento</p></div><div class="count"><strong>16</strong><span>reconocimientos</span></div></div><div class="awardStage"><div class="awardYearLayer"><span class="awardYear" style="left:4.00%">2008</span><span class="awardYear" style="left:24.44%">2012</span><span class="awardYear" style="left:39.78%">2015</span><span class="awardYear" style="left:44.89%">2016</span><span class="awardYear" style="left:50.00%">2017</span><span class="awardYear" style="left:60.22%">2019</span><span class="awardYear" style="left:65.33%">2020</span><span class="awardYear" style="left:70.44%">2021</span><span class="awardYear" style="left:75.56%">2022</span><span class="awardYear" style="left:90.89%">2025</span><span class="awardYear" style="left:96.00%">2026</span></div><button class="awardNode" style="left:4.00%;top:50px" onclick="showAward(1)"><i></i></button><button class="awardNode" style="left:24.44%;top:50px" onclick="showAward(2)"><i></i></button><button class="awardNode highlight" style="left:39.78%;top:50px" onclick="showAward(3)"><i></i></button><button class="awardNode" style="left:44.89%;top:50px" onclick="showAward(4)"><i></i></button><button class="awardNode" style="left:44.89%;top:81px" onclick="showAward(5)"><i></i></button><button class="awardNode" style="left:44.89%;top:112px" onclick="showAward(6)"><i></i></button><button class="awardNode" style="left:50.00%;top:50px" onclick="showAward(7)"><i></i></button><button class="awardNode" style="left:60.22%;top:50px" onclick="showAward(8)"><i></i></button><button class="awardNode" style="left:65.33%;top:50px" onclick="showAward(9)"><i></i></button><button class="awardNode" style="left:70.44%;top:50px" onclick="showAward(10)"><i></i></button><button class="awardNode" style="left:70.44%;top:81px" onclick="showAward(16)"><i></i></button><button class="awardNode" style="left:75.56%;top:50px" onclick="showAward(11)"><i></i></button><button class="awardNode" style="left:90.89%;top:50px" onclick="showAward(12)"><i></i></button><button class="awardNode highlight" style="left:90.89%;top:81px" onclick="showAward(13)"><i></i></button><button class="awardNode" style="left:96.00%;top:50px" onclick="showAward(14)"><i></i></button><button class="awardNode" style="left:96.00%;top:81px" onclick="showAward(15)"><i></i></button></div></article>
+</section></main>
+<aside id="drawer" class="drawer"><button class="drawerClose" onclick="closeDrawer()">✕</button><div id="drawerContent"></div></aside>
+<script>
+const SCHOLARSHIPS=[{"period": "2005", "name": "Beca de colaboración de segundo ciclo", "entity": "Ministerio de Educación y Ciencia", "detail": "Departamento de Psicología Básica, Clínica y Psicobiología. Universitat Jaume I."}, {"period": "2007–2011", "name": "Beca de Formación del Personal Investigador (FPI) – UJI", "entity": "Universitat Jaume I", "detail": "Departamento de Psicología Básica, Clínica y Psicobiología. Universitat Jaume I."}, {"period": "2011–2012", "name": "Beca de continuidad de la actividad investigadora", "entity": "Universitat Jaume I", "detail": "Departamento de Psicología Básica, Clínica y Psicobiología. Universitat Jaume I."}, {"period": "2012", "name": "Beca de proyecto", "entity": "Universitat Jaume I", "detail": "El síndrome de externalización-desinhibición: polimorfismos genéticos, factores de personalidad y otros factores psicosociales en un estudio prospectivo de 5 años."}];
+const AWARDS=[{"id":1,"year":2008,"name":"Premio al mejor póster","event":"X Jornada de la Sociedad Española para la Investigación de las Diferencias Individuales (SEIDI)","work":"Personalidad y variables psicosociales relacionadas con el consumo de alcohol en la adolescencia: un estudio longitudinal en función del género","type":"Congreso","highlight":false,"congressId":178},{"id":2,"year":2012,"name":"Premio Dr. Miguel Ángel Torres Hernández","event":"XXXIX Jornadas Nacionales Socidrogalcohol & WPA Sponsored Thematic Meeting","work":"Relación entre el síndrome de internalización y el consumo de alcohol problemático: El papel de los motivos de afrontamiento","type":"Congreso","highlight":false,"congressId":107},{"id":3,"year":2015,"name":"Premio Jóvenes Investigadores","event":"Banco Santander · Ciencias de la Salud","work":"","type":"Individual","highlight":true},{"id":4,"year":2016,"name":"Premio al mejor póster","event":"II Jornadas de Investigación para los Alumnos de Ciencias de la Salud","work":"Estudio de las propiedades psicométricas de la versión corta del cuestionario de expectativas EQ: El EQ Short Form (EQ-SF)","type":"Congreso","highlight":false,"congressId":212},{"id":5,"year":2016,"name":"Premio al mejor póster en el área de personalidad","event":"V Jornada AIIDI","work":"Relación entre la personalidad, el apoyo social percibido y la sintomatología internalizante y externalizante","type":"Congreso","highlight":false,"congressId":119},{"id":6,"year":2016,"name":"Premio a la mejor monografía en Ciencias de la Salud","event":"XIX Premios Nacionales de Edición Universitaria","work":"Entrena't les neurones","type":"Monografía","highlight":false},{"id":7,"year":2017,"name":"Premio al mejor póster del Grado de Psicología","event":"III Jornadas de Investigación para los Alumnos de Ciencias de la Salud","work":"Pocket money and deviant peers: additive and moderation effects in predicting adolescent substance use","type":"Congreso","highlight":false,"congressId":213},{"id":8,"year":2019,"name":"Premio al mejor póster Ediciones Pirámide · modalidad joven investigador","event":"5th International Congress of Clinical and Health Psychology on Children and Adolescents","work":"Sensibilidad y generación del estrés en la adultez emergente: La personalidad como variable explicativa","type":"Congreso","highlight":false,"congressId":54},{"id":9,"year":2020,"name":"Premio TEA Ediciones al mejor póster Junior","event":"IX Jornadas AIIDI","work":"Longitudinal associations of Neuroticism and Extraversion with the DSM-5 severity measures of distress and fear: A growth curve modeling study in emerging adulthood","type":"Congreso","highlight":false,"congressId":57},{"id":10,"year":2021,"name":"Premio a la mejor comunicación oral","event":"V Jornada de Psicopatía","work":"Cross-sectional and longitudinal associations between psychopathy and normal personality in an adolescent, community sample","type":"Congreso","highlight":false,"congressId":227},{"id":11,"year":2022,"name":"Premio a la mejor comunicación oral","event":"8th International Congress of Clinical and Health Psychology in Children and Adolescents","work":"Longitudinal relationships between social media addiction and psychopathological problems: A two-wave cross-lagged panel study in adolescents","type":"Congreso","highlight":false,"congressId":79},{"id":12,"year":2025,"name":"Premio a la mejor comunicación oral del Grado en Psicología","event":"X Jornadas de Investigación de la Facultad de Ciencias de la Salud","work":"Efectividad de las intervenciones psicológicas en el tratamiento de los terrores nocturnos: Una revisión sistemática","type":"Congreso","highlight":false,"congressId":234},{"id":13,"year":2025,"name":"Premio a la mejor comunicación oral senior","event":"XIV Jornadas AIIDI","work":"Risk variables for transdiagnostic factors of psychopathology. Personality – What else?","type":"Congreso","highlight":true,"congressId":153},{"id":14,"year":2026,"name":"Premio de investigación Juan Carlos Oliver Moreno al mejor póster de postgrado","event":"XI Jornadas de Investigación de la Facultad de Ciencias de la Salud","work":"Factores asociados al uso simultáneo de alcohol y marihuana (SAM) en adultos jóvenes: personalidad, psicopatología y uso de sustancias","type":"Congreso","highlight":false,"congressId":238},{"id":15,"year":2026,"name":"Premio a la mejor comunicación oral junior","event":"XV Jornadas AIIDI","work":"Are the kids alright? Tendencias longitudinales en psicopatología interiorizada y exteriorizada e influencia de la personalidad en adolescentes entre 2022 y 2025","type":"Congreso","highlight":false,"congressId":166},{"id":16,"year":2021,"name":"Premio a la mejor comunicación junior","event":"X Jornadas de la Asociación Iberoamericana para la Investigación de las Diferencias Individuales (AIIDI)","work":"El neuroticismo predice (casi) todo, pero no es predicho por (casi) nada: Un estudio longitudinal sobre la estabilidad emocional, rumiación, depresión e ideación suicida en la adultez emergente","type":"Congreso","highlight":false,"congressId":66}];
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+function showScholarship(i){const x=SCHOLARSHIPS[i];document.getElementById('drawerContent').innerHTML=`<div class="scholarshipYear">${x.period}</div><div class="entry"><b>${x.name}</b><div>${x.entity}</div><div>${x.detail}</div></div>`;document.getElementById('drawer').classList.add('open')}
+function showAward(id){const x=AWARDS.find(v=>v.id===id);let photo='';if(x.year===2015&&x.name.includes('Jóvenes Investigadores'))photo='<img class="awardPhoto" src="./assets/premio-jovenes-investigadores-2015.jpg">';if(x.year===2025&&x.name.includes('comunicación oral senior'))photo='<img class="awardPhoto" src="./assets/premio-aiidi-2025.jpeg">';document.getElementById('drawerContent').innerHTML=`<h2>${x.year}</h2>${photo}<div class="entry"><b>${x.name}</b><div>${x.event}</div>${x.work?`<div style="margin-top:7px;color:#18313d">${x.work}</div>`:''}<div>${x.type}</div>${x.congressId?`<div>ID del CV: ${x.congressId} · <a href="../congresos/mapa.html?id=${x.congressId}">Presencia científica</a></div>`:''}</div>`;document.getElementById('drawer').classList.add('open')}
+</script>
+<script id="click-outside-close-recognition">
+document.addEventListener('click', function(ev){
+  const drawer=document.getElementById('drawer');
+  if(!drawer || !drawer.classList.contains('open')) return;
+  if(drawer.contains(ev.target)) return;
+  if(ev.target.closest('.schNode,.awardNode')) return;
+  if(typeof closeDrawer==='function') closeDrawer();
+  else drawer.classList.remove('open');
+});
+</script>
+
+
+</body></html>
