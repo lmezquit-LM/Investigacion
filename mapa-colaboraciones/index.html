@@ -149,6 +149,14 @@ color:#0B3F5C;font-size:11px;font-weight:800}
 #cast-preview[data-mode=movilidad] .cast-detail{min-height:0;margin:0 0 8px;line-height:1.45;font-size:11px}#cast-preview[data-mode=movilidad] .cast-count{margin-top:3px;min-height:22px}#cast-preview .cast-growth-head{margin-bottom:7px}#cast-preview .cast-time{margin-bottom:3px}#cast-preview .cast-growth{margin-top:8px;padding-top:7px}#cast-preview .cast-mobility-list{margin-top:3px}#cast-preview{overflow:visible}#networksView{overflow:visible}
 </style>
 <style>#cast-preview[data-mode=movilidad] .cast-detail{display:none}#cast-preview[data-mode=movilidad] .cast-count{font-size:13px;line-height:1.5;min-height:22px;margin-bottom:4px}</style>
+<style>
+#cast-preview .cast-dialog{max-height:calc(100vh - 24px);width:min(700px,94vw);padding:16px 20px}
+#cast-preview .cast-gallery{grid-template-columns:1fr 1.4fr;gap:12px;margin-top:10px}
+#cast-preview .cast-gallery img{max-height:min(225px,29vh);object-fit:contain;width:100%}
+#cast-preview .cast-dialog h3{margin-top:10px;margin-bottom:5px;font-size:15px}
+#cast-preview .cast-dialog p{margin:4px 0;font-size:12px;line-height:1.4}
+#cast-preview .cast-map{margin-top:4px}
+</style>
 <script type="module">
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 import world from 'https://esm.sh/@d3-maps/atlas@1.0.0/world/countries/countries-110m';
@@ -178,6 +186,7 @@ const photos=['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQ
 const affiliations={USA:'William & Mary · University of New Mexico · Colorado State University · Old Dominion University · University at Buffalo · Fordham University',ARG:'Universidad Nacional de Córdoba',GBR:'University of Exeter',ZAF:'University of Cape Town',CAN:'York University',NZL:'University of Waikato'};
 const dialog=root.querySelector('.cast-dialog');root.querySelector('.cast-close').onclick=()=>dialog.close();
 function openCountry(iso){
+ if(viewMode==='movilidad'){openMove(moveIndex);return;}
  stop();
  const isCurrent=viewMode==='movilidad'||progress>=.75;
  const groups=isCurrent?stages[3].groups:progress>=.75?stages[3].groups:progress>=.4?stages[2].groups:progress>=.18?stages[1].groups:original;
@@ -203,14 +212,14 @@ const sequence=[1,3];
 const map=root.querySelector('.cast-map');
 function detail(iso){selected=iso;const names=stages[current].groups[iso];root.querySelector('.cast-detail').textContent=names?countries[iso]+': '+names.join(' · '):'';}
 function draw(){
- const stage=stages[3];const width=Math.max(240,map.clientWidth),height=Math.min(155,width*.42);
+ const stage=stages[3];const width=Math.max(240,map.clientWidth),height=Math.max(120,Math.min(320,width*.50,document.documentElement.clientHeight-map.getBoundingClientRect().top-52));
  const projection=d3.geoNaturalEarth1().fitExtent([[2,3],[width-2,height-3]],{type:'FeatureCollection',features:features.filter(f=>f.properties.id!=='ATA')});const path=d3.geoPath(projection);
  const svg=d3.select(map).selectAll('svg').data([null]).join('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('role','img').attr('aria-label',`Países de CAST: ${stage.label}`);
  svg.selectAll('path.cast-country').data(features.filter(f=>f.properties.id!=='ATA')).join('path').attr('class','cast-country').attr('d',path).attr('fill','#e6edef').attr('stroke','#fff').attr('stroke-width',.35);
  svg.selectAll('path.cast-country').filter(f=>countries[f.properties.id]).style('cursor','pointer').on('click',(e,f)=>{if(viewMode==='movilidad'||historicalState().active.includes(f.properties.id))openCountry(f.properties.id);});
  svg.selectAll('circle').data(features.filter(f=>countries[f.properties.id])).join('circle').attr('cx',f=>projection(d3.geoCentroid(f))[0]).attr('cy',f=>projection(d3.geoCentroid(f))[1]).attr('fill','#eab51d').attr('stroke','#fff').attr('stroke-width',.8).style('cursor','pointer').on('click',(e,f)=>openCountry(f.properties.id));
  const defs=svg.selectAll('defs').data([null]).join('defs');defs.selectAll('marker').data([null]).join('marker').attr('id','cast-route-arrow').attr('viewBox','0 -4 8 8').attr('refX',7).attr('refY',0).attr('markerWidth',5).attr('markerHeight',5).attr('orient','auto').selectAll('path').data([null]).join('path').attr('d','M0,-4L8,0L0,4').attr('fill','#0b3f5c');
- svg.selectAll('path.cast-route').data(moves).join('path').attr('class','cast-route').attr('d',(m,i)=>{const a=projection(d3.geoCentroid(features.find(f=>f.properties.id===m.from))),b=projection(d3.geoCentroid(features.find(f=>f.properties.id===m.to)));const dx=b[0]-a[0],dy=b[1]-a[1];return `M${a} Q${(a[0]+b[0])/2-dy*.22},${(a[1]+b[1])/2+dx*(i===2?.35:.22)} ${b}`;}).attr('fill','none').attr('stroke','#0b3f5c').attr('stroke-width',2).attr('marker-end','url(#cast-route-arrow)');
+ svg.selectAll('path.cast-route').data(moves).join('path').attr('class','cast-route').attr('d',(m,i)=>{const a=projection(d3.geoCentroid(features.find(f=>f.properties.id===m.from))),b=projection(d3.geoCentroid(features.find(f=>f.properties.id===m.to)));const dx=b[0]-a[0],dy=b[1]-a[1];return `M${a} Q${(a[0]+b[0])/2-dy*.22},${(a[1]+b[1])/2+dx*(i===2?.35:.22)} ${b}`;}).attr('fill','none').attr('stroke','#0b3f5c').attr('stroke-width',2).attr('marker-end','url(#cast-route-arrow)').style('cursor','pointer').on('click',(e,m)=>openMove(moves.indexOf(m)));
  paint();
 }
 function weight(iso){return historicalState().weights[iso]||0;}
@@ -225,6 +234,12 @@ function paint(){
 let countryKey='';
 function renderCountries(list){const key=list.join(',');if(key===countryKey)return;countryKey=key;const c=root.querySelector('.cast-country-buttons');c.replaceChildren();for(const iso of list){const b=document.createElement('button');b.type='button';b.textContent=countries[iso];b.onclick=()=>openCountry(iso);c.append(b);}}
 function setMode(mode){viewMode=mode;root.dataset.mode=mode;root.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));root.querySelector('.cast-country-buttons').hidden=mode==='movilidad';root.querySelector('.cast-country-buttons').style.display=mode==='movilidad'?'none':'flex';root.querySelector('.cast-time').innerHTML=mode==='red'?'<span>Inicio · 2016</span><span>Actualidad</span>':'<span>2017</span><span>2026</span>';root.querySelector('.cast-source').textContent='';}
+function openMove(i){
+ stop();moveIndex=i;moveProgress=1;showMove();paint();
+ const m=moves[i];
+ root.querySelector('.cast-dialog-content').innerHTML='<h3>'+m.name+'</h3><p><b>'+m.type+'</b> · '+m.dates+'</p><h3>'+m.route+'</h3><p>'+m.detail+'</p>';
+ dialog.showModal();
+}
 function showMove(){const m=moves[moveIndex];root.querySelector('.cast-detail').textContent='';root.querySelectorAll('[data-move]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.move===moveIndex)));}
 function update(save=false){
  const stage=stages[current];root.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.step===current)));
@@ -256,7 +271,7 @@ function drawStays(){
  const trace={
   type:'scattergeo',mode:'markers+text',
   lat:STAYS.map(x=>x.lat),lon:STAYS.map(x=>x.lon),
-  text:STAYS.map(x=>x.city),textposition:'top center',
+  text:STAYS.map(x=>x.city),textposition:STAYS.map(x=>x.id==='minnesota'?'bottom center':'top center'),
   customdata:STAYS.map(x=>x.id),
   marker:{size:STAYS.map(x=>11+2*(x.periods.length-1)),color:colors,line:{color:'#fff',width:2},opacity:.95},
   hovertemplate:'<b>%{text}</b><br>Haz clic para consultar la estancia<extra></extra>'
