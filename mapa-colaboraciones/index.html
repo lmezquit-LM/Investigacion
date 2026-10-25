@@ -89,23 +89,21 @@ color:#0B3F5C;font-size:11px;font-weight:800}
 
 <section id="networksView" class="view">
 <div id="cast-preview">
- <div class="cast-total"><b>2</b> redes de cooperación activas</div>
  <div class="cast-grid">
   <section class="cast-panel">
    <header><strong>CAST</strong><small>2015 → actualidad</small></header>
    <h3>Cross-Cultural Addictions Study Team</h3>
-   <p>College of William &amp; Mary</p><p class="cast-coordinator">Coordinado por el Dr. Adrian J. Bravo</p>
+   <p class="cast-coordinator">College of William &amp; Mary · Coordinado por el Dr. Adrian J. Bravo</p>
    <div class="cast-growth">
-    <div class="cast-growth-title">Una red en expansión</div>
-    <div class="cast-modes"><button type="button" data-mode="red">Red internacional</button><button type="button" data-mode="movilidad">Movilidad y formación</button></div>
+    <div class="cast-growth-head"><div class="cast-growth-title">Una red en expansión</div>
+    <div class="cast-modes"><button type="button" data-mode="red">Red internacional</button><button type="button" data-mode="movilidad">Movilidad y formación</button></div></div>
     <div class="cast-time"><span>Inicio · 2016</span><span>Actualidad</span></div>
     <input class="cast-scrubber" type="range" min="0" max="1000" value="0" step="1" aria-label="Recorrer la línea temporal de CAST">
     <div class="cast-steps"><button type="button" class="cast-play">▶ Reproducir</button></div>
     <div class="cast-count" aria-live="polite"></div>
+    <div class="cast-detail" aria-live="polite"></div>
     <div class="cast-map"></div>
     <div class="cast-country-buttons"></div>
-    <div class="cast-mobility-list" hidden></div>
-    <div class="cast-detail" aria-live="polite"></div>
     <div class="cast-source"></div>
    </div>
   </section>
@@ -121,7 +119,7 @@ color:#0B3F5C;font-size:11px;font-weight:800}
 #cast-preview .cast-growth{border-top:1px solid var(--cast-line);margin-top:18px;padding-top:12px}#cast-preview .cast-growth-title{font-size:13px;font-weight:600;margin-bottom:10px}#cast-preview .cast-steps{display:flex;gap:4px;flex-wrap:wrap}#cast-preview button{font:inherit;cursor:pointer}#cast-preview .cast-steps button{font-size:11px;border:1px solid var(--cast-line);padding:6px 8px;background:#fff;color:var(--cast-ink);border-radius:6px}#cast-preview .cast-steps button[aria-pressed=true]{background:var(--cast-ink);color:#fff;border-color:var(--cast-ink)}#cast-preview .cast-count{font-size:13px;margin-top:12px;min-height:20px}#cast-preview .cast-map svg{display:block;width:100%;height:auto}#cast-preview .cast-country-buttons{display:flex;flex-wrap:wrap;gap:5px 10px}#cast-preview .cast-country-buttons button{border:0;padding:3px 0;background:transparent;color:var(--cast-ink);font-size:11px;text-decoration:underline;text-underline-offset:3px}#cast-preview .cast-detail{font-size:11px;line-height:1.5;margin-top:9px;min-height:35px;color:var(--cast-muted)}#cast-preview .cast-source{font-size:11px;color:var(--cast-muted);line-height:1.45;border-top:1px solid var(--cast-line);margin-top:9px;padding-top:8px}
 @media(max-width:560px){#cast-preview .cast-grid{grid-template-columns:1fr}#cast-preview .cast-panel{padding:15px}}
  
-#networksView{padding:0;overflow:auto}#cast-preview{padding:10px;height:100%;overflow:auto}#cast-preview .cast-panel{padding:16px}#cast-preview .cast-total{padding:8px 0}#cast-preview .cast-growth{margin-top:12px;padding-top:10px}
+#networksView{padding:0;overflow:auto}#cast-preview{padding:10px;height:100%;overflow:auto}#cast-preview .cast-panel{padding:16px}#cast-preview .cast-total{padding:8px 0}#cast-preview .cast-growth{margin-top:9px;padding-top:8px}#cast-preview .cast-panel h3{margin-top:12px}#cast-preview .cast-modes{margin-bottom:9px}
 </style>
 <style>
 #cast-preview .cast-mobility-list{display:flex;flex-wrap:wrap;gap:5px 10px}#cast-preview .cast-mobility-list button{padding:4px 5px;background:transparent;font-size:11px}#cast-preview .cast-mobility-list small{display:inline;margin-left:5px;font-size:11px;color:#64777f}#cast-preview[data-mode=movilidad] .cast-detail{min-height:68px;font-size:11px}#cast-preview[data-mode=movilidad] .cast-count{font-size:13px;min-height:25px}
@@ -141,6 +139,16 @@ color:#0B3F5C;font-size:11px;font-weight:800}
 <style>
 #cast-preview .cast-scrubber{width:100%;accent-color:#0b3f5c;margin:2px 0 8px;cursor:ew-resize}#cast-preview .cast-source:empty{display:none}
 </style>
+<style>
+#cast-preview .cast-growth-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:9px}#cast-preview .cast-growth-head .cast-growth-title,#cast-preview .cast-growth-head .cast-modes{margin-bottom:0}#cast-preview .cast-coordinator{line-height:1.5}
+</style>
+<style>
+#cast-preview .cast-mobility-list{display:flex;gap:3px 7px}#cast-preview .cast-mobility-list button{white-space:nowrap;padding:3px 2px}#cast-preview .cast-mobility-list small{margin-left:4px}
+</style>
+<style>
+#cast-preview[data-mode=movilidad] .cast-detail{min-height:0;margin:0 0 8px;line-height:1.45;font-size:11px}#cast-preview[data-mode=movilidad] .cast-count{margin-top:3px;min-height:22px}#cast-preview .cast-growth-head{margin-bottom:7px}#cast-preview .cast-time{margin-bottom:3px}#cast-preview .cast-growth{margin-top:8px;padding-top:7px}#cast-preview .cast-mobility-list{margin-top:3px}#cast-preview{overflow:visible}#networksView{overflow:visible}
+</style>
+<style>#cast-preview[data-mode=movilidad] .cast-detail{display:none}#cast-preview[data-mode=movilidad] .cast-count{font-size:13px;line-height:1.5;min-height:22px;margin-bottom:4px}</style>
 <script type="module">
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 import world from 'https://esm.sh/@d3-maps/atlas@1.0.0/world/countries/countries-110m';
@@ -195,7 +203,7 @@ const sequence=[1,3];
 const map=root.querySelector('.cast-map');
 function detail(iso){selected=iso;const names=stages[current].groups[iso];root.querySelector('.cast-detail').textContent=names?countries[iso]+': '+names.join(' · '):'';}
 function draw(){
- const stage=stages[3];const width=Math.max(240,map.clientWidth),height=Math.min(220,width*.52);
+ const stage=stages[3];const width=Math.max(240,map.clientWidth),height=Math.min(155,width*.42);
  const projection=d3.geoNaturalEarth1().fitExtent([[2,3],[width-2,height-3]],{type:'FeatureCollection',features:features.filter(f=>f.properties.id!=='ATA')});const path=d3.geoPath(projection);
  const svg=d3.select(map).selectAll('svg').data([null]).join('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('role','img').attr('aria-label',`Países de CAST: ${stage.label}`);
  svg.selectAll('path.cast-country').data(features.filter(f=>f.properties.id!=='ATA')).join('path').attr('class','cast-country').attr('d',path).attr('fill','#e6edef').attr('stroke','#fff').attr('stroke-width',.35);
@@ -211,13 +219,13 @@ function paint(){
  d3.select(map).selectAll('circle').attr('r',f=>4*weight(f.properties.id));
  d3.select(map).selectAll('.cast-route').each(function(m,i){const length=this.getTotalLength();const amount=viewMode!=='movilidad'||i>moveIndex?0:i<moveIndex?1:moveProgress;d3.select(this).attr('stroke-dasharray',`${length} ${length}`).attr('stroke-dashoffset',length*(1-amount)).attr('opacity',i===moveIndex?1:.35).attr('marker-end',amount>.97?'url(#cast-route-arrow)':null);});
  root.querySelector('.cast-scrubber').value=Math.round(progress*1000);
- const hist=historicalState();root.querySelector('.cast-count').innerHTML=viewMode==='movilidad'?`<b>${moves[moveIndex].name}</b> · ${moves[moveIndex].type}`:`<b>${hist.n} investigadores · ${hist.active.length} países</b>`;
+ const hist=historicalState();root.querySelector('.cast-count').innerHTML=viewMode==='movilidad'?`<b>${moves[moveIndex].name}</b> · ${moves[moveIndex].type} (${moves[moveIndex].short})`:`<b>${hist.n} investigadores · ${hist.active.length} países</b>`;
  if(viewMode==='red'){root.querySelector('.cast-source').textContent='';renderCountries(hist.active);}
 }
 let countryKey='';
 function renderCountries(list){const key=list.join(',');if(key===countryKey)return;countryKey=key;const c=root.querySelector('.cast-country-buttons');c.replaceChildren();for(const iso of list){const b=document.createElement('button');b.type='button';b.textContent=countries[iso];b.onclick=()=>openCountry(iso);c.append(b);}}
-function setMode(mode){viewMode=mode;root.dataset.mode=mode;root.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));root.querySelector('.cast-country-buttons').hidden=mode==='movilidad';root.querySelector('.cast-country-buttons').style.display=mode==='movilidad'?'none':'flex';root.querySelector('.cast-mobility-list').hidden=mode!=='movilidad';root.querySelector('.cast-time').innerHTML=mode==='red'?'<span>Inicio · 2016</span><span>Actualidad</span>':'<span>2017</span><span>2026</span>';root.querySelector('.cast-source').textContent='';}
-function showMove(){const m=moves[moveIndex];root.querySelector('.cast-detail').innerHTML=`<b>${m.route} · ${m.dates}</b><br>${m.detail}`;root.querySelectorAll('[data-move]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.move===moveIndex)));}
+function setMode(mode){viewMode=mode;root.dataset.mode=mode;root.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));root.querySelector('.cast-country-buttons').hidden=mode==='movilidad';root.querySelector('.cast-country-buttons').style.display=mode==='movilidad'?'none':'flex';root.querySelector('.cast-time').innerHTML=mode==='red'?'<span>Inicio · 2016</span><span>Actualidad</span>':'<span>2017</span><span>2026</span>';root.querySelector('.cast-source').textContent='';}
+function showMove(){const m=moves[moveIndex];root.querySelector('.cast-detail').textContent='';root.querySelectorAll('[data-move]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.move===moveIndex)));}
 function update(save=false){
  const stage=stages[current];root.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.step===current)));
  root.querySelector('.cast-count').innerHTML=stage.members?`<b>${stage.members} investigadores · ${Object.keys(stage.groups).length} países</b>`:'<b>Una colaboración entre 3 países</b>';
@@ -233,7 +241,6 @@ function play(){if(viewMode==='red'&&progress>=1){elapsed=0;progress=0;paint();}
 root.querySelector('.cast-play').onclick=()=>timer?stop():play();
 root.querySelector('.cast-scrubber').oninput=e=>{stop();progress=+e.target.value/1000;if(viewMode==='red')elapsed=progress*24000;else{elapsed=progress*32000;moveIndex=Math.min(3,Math.floor(elapsed/8000));moveProgress=1;showMove();}paint();};
 root.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{stop();elapsed=0;lastTick=null;setMode(b.dataset.mode);progress=b.dataset.mode==='red'?0:1;moveIndex=0;moveProgress=1;showMove();paint();stop();});
-const ml=root.querySelector('.cast-mobility-list');moves.forEach((m,i)=>{const b=document.createElement('button');b.type='button';b.dataset.move=i;b.innerHTML=m.name+'<small>'+m.short+'</small>';b.onclick=()=>{stop();moveIndex=i;moveProgress=1;showMove();paint();};ml.append(b);});
 root.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{stop();current=+b.dataset.step;update(true);});
 const stored=window.openai?.widgetState?.privateContent?.stage;if(sequence.includes(stored)){current=stored;phase=sequence.indexOf(stored);}
 update();setMode('red');countryKey='';new ResizeObserver(draw).observe(map);progress=0;paint();stop();
