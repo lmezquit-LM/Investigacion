@@ -55,8 +55,8 @@ html,body{background:#fff!important;min-height:100%;overflow-x:hidden}
       <button class="chip" data-view="funding">Financiación</button>
     </div>
     <div class="filters">
-      <button class="chip active" data-role="all">Todos</button>
-      <button class="chip" data-role="IP">Como IP</button>
+      <button class="chip" data-role="all">Todos</button>
+      <button class="chip active" data-role="IP">Como IP</button>
       <button class="chip" data-role="Equipo investigador">Equipo</button>
       <select class="select" id="scopeFilter" aria-label="Filtrar por ámbito"><option value="all">Todas las categorías</option><option value="competitive" selected>Proyectos competitivos</option><option>Nacional</option><option>Autonómico</option><option>Local</option><option>Ayuda complementaria</option><option>Ayuda de movilidad</option></select>
       <select class="select" id="statusFilter" aria-label="Filtrar por estado"><option value="all">Todos los estados</option><option value="running">En ejecución</option><option value="finished">Finalizados</option></select>
@@ -513,7 +513,7 @@ const projects = [
     "notes": "Estancia temporal en otro centro de investigación"
   }
 ];
-const minYear=2008,maxYear=2028,currentYear=2026; let role='all';
+const minYear=2008,maxYear=2028,currentYear=2026; let role='IP';
 const euro=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
 function visible(){const scope=document.getElementById('scopeFilter').value,status=document.getElementById('statusFilter').value;return projects.filter(p=>(role==='all'||p.role===role)&&(scope==='all'||(scope==='competitive'?p.type==='Proyecto competitivo':p.scope===scope))&&(status==='all'||(status==='running'?p.end>=currentYear:p.end<currentYear)))}
 function renderYears(){const y=document.getElementById('years');y.innerHTML='<div class="blank">Proyecto / entidad</div>'+Array.from({length:maxYear-minYear+1},(_,i)=>`<div class="year">${String(minYear+i).slice(2)}</div>`).join('')}
